@@ -15,4 +15,4 @@ export CUDA_CACHE_PATH="$XDG_CACHE_HOME/cuda"
 export TMPDIR="$SLURM_SUBMIT_DIR/tmp/$SLURM_ARRAY_TASK_ID"
 mkdir -p "$TMPDIR" "$XDG_CACHE_HOME"
 seed=$((20260929 + SLURM_ARRAY_TASK_ID))
-/home/mcox340/.conda/envs/sevennet-reewc/bin/python -u race.py --data data --seed "$seed" --output "results/reference-$seed.json"
+"${PYTHON_BIN:-python}" -u race.py --data data --seed "$seed" --output "results/reference-$seed.json"

@@ -4,6 +4,8 @@
 
 [Dashboard](https://mcox3406.github.io/mol-speedrun/) · [Rules](RULES.md) · [Data](DATA.md) · [Submit](SUBMIT.md)
 
+Python 3.11 and a CUDA-capable GPU.
+
 ```sh
 pip install -r requirements.txt
 python fetch_data.py                       # 11 MB download

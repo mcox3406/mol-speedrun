@@ -1,6 +1,6 @@
 # Data and scope
 
-Download with `python fetch_data.py` (about 11 MB compressed, 38 MB unpacked). The downloader checks the archive SHA256, fixed file list, and each file's checksum against `download.json` and `data-manifest.json`. It never extracts arbitrary archive paths. To use a local copy: `python fetch_data.py --archive /path/qcdge-v0.tar.gz`.
+Download with `python fetch_data.py` (about 11 MB compressed, 36 MiB unpacked). The downloader checks the archive SHA256, fixed file list, and each file's checksum against `download.json` and `data-manifest.json`. It never extracts arbitrary archive paths. To use a local copy: `python fetch_data.py --archive /path/qcdge-v0.tar.gz`.
 
 | File | Role |
 |---|---|

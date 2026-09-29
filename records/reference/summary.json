@@ -1,0 +1,63 @@
+{
+  "protocol": "qcdge-speedrun-v0",
+  "status": "checks_passed_pending_reproduction",
+  "median_seconds": 300.42301350459456,
+  "runs": [
+    {
+      "seed": 20260929,
+      "seconds": 365.07442249543965,
+      "metrics": {
+        "S1_eV": 0.17371117615982773,
+        "T1_eV": 0.1453218474386542,
+        "delta_ST_eV": 0.11180933503697282,
+        "log_f": 0.24240747720961384,
+        "raw_f": 0.024304140080017005,
+        "bright_f": 0.1159495124192621,
+        "bright_n": 8236
+      },
+      "report_sha256": "faa6146ceedb8aa95b6c1ae1de3d62741ef57343e3d5fc4d8fe32606c6ae2901",
+      "checkpoint_sha256": "07520bf975b2aace667f02588af43100b542f41ac5debd6b984adc1b04a5ef90"
+    },
+    {
+      "seed": 20260930,
+      "seconds": 300.42301350459456,
+      "metrics": {
+        "S1_eV": 0.17526115222209268,
+        "T1_eV": 0.14818243060162012,
+        "delta_ST_eV": 0.11216038471140309,
+        "log_f": 0.2394043579615184,
+        "raw_f": 0.022842796038654543,
+        "bright_f": 0.10527249069939874,
+        "bright_n": 8236
+      },
+      "report_sha256": "6a277b344007c8c07dfde63dbe00d973d33afc090b34bb0a1d94da0f67110502",
+      "checkpoint_sha256": "ab167732f969ad08884b473cd8901221e847b2d10ca98153f2397bd48a65ac55"
+    },
+    {
+      "seed": 20260931,
+      "seconds": 291.1149178324267,
+      "metrics": {
+        "S1_eV": 0.1706286585612438,
+        "T1_eV": 0.1438504409388943,
+        "delta_ST_eV": 0.11228069859891655,
+        "log_f": 0.24025976920678538,
+        "raw_f": 0.022712535353576684,
+        "bright_f": 0.10447597698595461,
+        "bright_n": 8236
+      },
+      "report_sha256": "2fdfa3347d4e0206ae3b887b3e3a963199b9689c0f93c56f60e22c1d4f635ebe",
+      "checkpoint_sha256": "2c3ab353674be80ccd179f1edbb556fe67c6ccd9bad760201a1c34ec4e2e2743"
+    }
+  ],
+  "audit": {
+    "S1_eV": 0.24211277063716832,
+    "T1_eV": 0.20481611413764633,
+    "delta_ST_eV": 0.15198022355477314,
+    "log_f": 0.2889559888617753,
+    "raw_f": 0.027278547161222282,
+    "bright_f": 0.08200427243014587,
+    "bright_n": 5723
+  },
+  "commit": "61d5421",
+  "notes": "Automatic checks cannot establish honest timing, hardware, train-only fitting, or provenance. Maintainer reproduction required."
+}

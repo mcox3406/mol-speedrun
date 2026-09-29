@@ -1,3 +1,4 @@
+# Legacy ESOL pilot; the v0 competition entry point is race.py.
 """Small supervised SMILES encoder and two intentionally simple memory ablations."""
 import argparse, csv, hashlib, json, platform, subprocess, time
 from pathlib import Path

@@ -1,0 +1,18 @@
+{
+  "protocol": "qcdge-speedrun-v0",
+  "seed": 20260929,
+  "run_sha256": "faa6146ceedb8aa95b6c1ae1de3d62741ef57343e3d5fc4d8fe32606c6ae2901",
+  "checkpoint_sha256": "07520bf975b2aace667f02588af43100b542f41ac5debd6b984adc1b04a5ef90",
+  "predictions_sha256": "eed826e7a8bd35e10c17dbbdb5faee8fb61645ebff40e0eafe35da956c168c23",
+  "metrics": {
+    "S1_eV": 0.2421127706371683,
+    "T1_eV": 0.20481611413764633,
+    "delta_ST_eV": 0.15198022355477311,
+    "log_f": 0.2889559888617753,
+    "raw_f": 0.027278547161222282,
+    "bright_f": 0.08200427243014587,
+    "bright_n": 5723
+  },
+  "rows": 31148,
+  "scope": "rare-family audit only; not used for selection or speed ranking"
+}

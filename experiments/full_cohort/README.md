@@ -1,5 +1,7 @@
 # Full-cohort development calibration
 
+Historical calibration record. The released competition contract is now in [RULES.md](../../RULES.md); its timed reference results are separate from these experiments.
+
 The full metadata-indexed QCDGE extraction is complete. This is calibration, not an official speedrun protocol or a frozen test benchmark.
 
 | Fold | Molecules | Chemical groups |
@@ -39,4 +41,4 @@ These CPU controls fit S1, T1, and transformed oscillator strength jointly, unli
 
 GPU timing separates CSV loading/tokenization, inner tuning, fresh fit, and evaluation; imports and CUDA context setup are excluded. CPU timings use cached features. Neither is an eligible competition record. Do not infer statistical superiority from one GPU seed. A chosen epoch count that cannot finish within the refit budget is explicitly flagged.
 
-The public rules still need a frozen quality target, reference hardware/CPU allowance, inclusive timing contract, seed panel, and an independently audited final test. Full-cohort calibration informs those decisions; increasing dataset size alone does not establish useful difficulty.
+These experiments informed the frozen v0 targets. The release uses an inclusive clock and a three-seed reference panel, plus a separately labeled rare-family audit. Increasing dataset size alone does not establish useful difficulty.

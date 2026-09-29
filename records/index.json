@@ -1,1 +1,8 @@
-[]
+[
+  {
+    "name": "SMILES transformer · 1.90M parameters",
+    "kind": "reference",
+    "summary": "records/reference/summary.json",
+    "reports": ["records/reference/reference-20260929.json", "records/reference/reference-20260930.json", "records/reference/reference-20260931.json"]
+  }
+]

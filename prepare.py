@@ -1,3 +1,4 @@
+# Legacy ESOL pilot; the v0 competition entry point is race.py.
 """Pinned ESOL input; structure-grouped, deterministic scaffold holdout."""
 import csv, hashlib, io, json, urllib.request
 from collections import defaultdict
