@@ -1,0 +1,40 @@
+{
+  "protocol": "esol-scaffold-v0",
+  "model": "graph",
+  "seed": 0,
+  "epochs": 3,
+  "threads": 4,
+  "parameters": 243265,
+  "device": "cpu",
+  "hardware": "arm64 / arm",
+  "platform": "macOS-15.5-arm64-arm-64bit",
+  "python": "3.12.8",
+  "torch": "2.14.0",
+  "numpy": "2.5.3",
+  "git_commit": "2709dbab643ba0b0b3f451e69e483a3c19a34552",
+  "dirty": false,
+  "manifest_sha256": "2f09614cbaf77865106ce2a453657d2d2c5f4c0e3791b997241af0ac6d35d8e5",
+  "train_source_sha256": "0ee072ed5f8246bd5b0af691a0d807fc4f2fb6ab098315038816aaf9c45c655c",
+  "preprocessing_seconds": 0.7813079999759793,
+  "total_seconds": 3.1225653750589117,
+  "best_val_rmse": 1.0607728958129883,
+  "best_epoch": 3,
+  "history": [
+    {
+      "epoch": 1,
+      "seconds": 1.8807225830387324,
+      "rmse": 1.6301333904266357
+    },
+    {
+      "epoch": 2,
+      "seconds": 2.487395124975592,
+      "rmse": 1.3262017965316772
+    },
+    {
+      "epoch": 3,
+      "seconds": 3.0604457079898566,
+      "rmse": 1.0607728958129883
+    }
+  ],
+  "status": "exploratory"
+}

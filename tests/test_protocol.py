@@ -3,7 +3,7 @@ from prepare import ROOT, digest
 class ProtocolTests(unittest.TestCase):
     def test_split_integrity(self):
         manifest=json.loads((ROOT/'data/manifest.json').read_text())
-        splits={s:list(csv.DictReader((ROOT/'data'/f'{s}.csv').open())) for s in ('train','val','test')}
+        splits={s:list(csv.DictReader((ROOT/'data'/f'{s}.csv').read_text().splitlines())) for s in ('train','val','test')}
         self.assertEqual(sum(map(len,splits.values())),1128)
         for a,rows in splits.items():
             self.assertEqual(digest(ROOT/'data'/f'{a}.csv'),manifest['files'][f'{a}.csv'])

@@ -11,6 +11,17 @@ def validate(r):
     assert r['status']=='exploratory'
     assert isinstance(r['git_commit'],str) and len(r['git_commit'])==40
     assert r['history'] and r['device']=='cpu'
+    for key in ('hardware','platform','python','torch','numpy','train_source_sha256'):
+        assert isinstance(r[key],str) and r[key]
+    assert len(r['train_source_sha256'])==64
+    assert isinstance(r['dirty'],bool)
+    for key in ('threads','epochs','parameters'):
+        assert isinstance(r[key],int) and not isinstance(r[key],bool) and r[key]>=0
+    assert r['threads']>0 and r['epochs']>0
+    assert r['preprocessing_seconds']<=r['total_seconds']
+    assert [h['epoch'] for h in r['history']]==list(range(1,len(r['history'])+1))
+    assert len(r['history'])==(1 if r['model'] in ('mean','ridge') else r['epochs'])
+    assert r['best_epoch']==min(r['history'],key=lambda h:h['rmse'])['epoch']
     for k in ('total_seconds','preprocessing_seconds','best_val_rmse'):
         assert math.isfinite(r[k]) and r[k]>=0
     previous=0

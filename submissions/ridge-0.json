@@ -1,0 +1,30 @@
+{
+  "protocol": "esol-scaffold-v0",
+  "model": "ridge",
+  "seed": 0,
+  "epochs": 20,
+  "threads": 4,
+  "parameters": 2049,
+  "device": "cpu",
+  "hardware": "arm64 / arm",
+  "platform": "macOS-15.5-arm64-arm-64bit",
+  "python": "3.12.8",
+  "torch": "2.14.0",
+  "numpy": "2.5.3",
+  "git_commit": "2709dbab643ba0b0b3f451e69e483a3c19a34552",
+  "dirty": false,
+  "manifest_sha256": "2f09614cbaf77865106ce2a453657d2d2c5f4c0e3791b997241af0ac6d35d8e5",
+  "train_source_sha256": "0ee072ed5f8246bd5b0af691a0d807fc4f2fb6ab098315038816aaf9c45c655c",
+  "preprocessing_seconds": 0.797908040927723,
+  "total_seconds": 0.880687415949069,
+  "best_val_rmse": 1.6620157957077026,
+  "best_epoch": 1,
+  "history": [
+    {
+      "epoch": 1,
+      "seconds": 0.8208446250064299,
+      "rmse": 1.6620157957077026
+    }
+  ],
+  "status": "exploratory"
+}
