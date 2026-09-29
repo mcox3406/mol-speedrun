@@ -27,6 +27,10 @@ class Regressor(nn.Module):
 
 def four(v):return torch.stack([v[:,0],v[:,1],v[:,0]-v[:,1],v[:,2]],dim=1)
 
+def intensity_metrics(pred_log,true_f):
+ raw=torch.clamp(.001*(torch.pow(10,pred_log.clamp(-6,6))-1),min=0);bright=true_f>=.1
+ return dict(mae=float((raw-true_f).abs().mean()),bright_n=int(bright.sum()),bright_mae=float((raw[bright]-true_f[bright]).abs().mean()) if bright.any() else None)
+
 def main():
  p=argparse.ArgumentParser();p.add_argument('--data',type=Path,required=True);p.add_argument('--split',type=Path,required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--device',default='cuda');p.add_argument('--seed',type=int,default=20260929);p.add_argument('--tune-seconds',type=float,default=600);p.add_argument('--refit-seconds',type=float,default=720);p.add_argument('--max-epochs',type=int,default=200);p.add_argument('--patience',type=int,default=20);p.add_argument('--batch-size',type=int,default=256);p.add_argument('--width',type=int,default=192);p.add_argument('--layers',type=int,default=4);p.add_argument('--heads',type=int,default=6);p.add_argument('--smoke',action='store_true');args=p.parse_args()
  torch.set_num_threads(4);cuda=args.device=='cuda'
@@ -43,7 +47,7 @@ def main():
  codes=[[ord(c)+1 for c in r['smiles']] for r in rows];assert max(map(len,codes))<=512 and all(max(v)<129 for v in codes)
  x=torch.zeros(len(rows),max(map(len,codes)),dtype=torch.long)
  for i,v in enumerate(codes):x[i,:len(v)]=torch.tensor(v)
- X=x.to(args.device);y=torch.tensor([[float(r['S1_eV']),float(r['T1_eV']),float(r['f_S1'])] for r in rows],device=args.device);y[:,2]=torch.log10(1+y[:,2]/.001);Y=four(y);sync();preprocessing=time.perf_counter()-start
+ X=x.to(args.device);y=torch.tensor([[float(r['S1_eV']),float(r['T1_eV']),float(r['f_S1'])] for r in rows],device=args.device);raw_f=y[:,2].clone();y[:,2]=torch.log10(1+y[:,2]/.001);Y=four(y);sync();preprocessing=time.perf_counter()-start
  names=['S1_eV','T1_eV','delta_ST_eV','log10_1_plus_f_over_0001']
  @torch.no_grad()
  def evaluate(model,idx,mu,sd):
@@ -51,9 +55,9 @@ def main():
   for batch in idx.split(args.batch_size):
    with torch.autocast(device_type=args.device,dtype=torch.bfloat16,enabled=cuda):pred=model(X[batch])
    parts.append(pred.float()*sd+mu)
-  pred=torch.cat(parts);truth=y[idx];p4=four(pred);t4=four(truth);error=(p4-t4).abs().mean(0);mse=(p4-t4).square().mean(0);variance=(t4-t4.mean(0)).square().mean(0);raw=torch.clamp(.001*(torch.pow(10,pred[:,2].clamp(-6,6))-1),min=0);true_f=.001*(torch.pow(10,truth[:,2])-1);bright=true_f>=.1
+  pred=torch.cat(parts);truth=y[idx];p4=four(pred);t4=four(truth);error=(p4-t4).abs().mean(0);mse=(p4-t4).square().mean(0);variance=(t4-t4.mean(0)).square().mean(0)
   scores={n:dict(mae=float(error[j]),rmse=float(mse[j].sqrt()),r2=float(1-mse[j]/variance[j])) for j,n in enumerate(names)}
-  scores['raw_f']=dict(mae=float((raw-true_f).abs().mean()),bright_n=int(bright.sum()),bright_mae=float((raw[bright]-true_f[bright]).abs().mean()) if bright.any() else None)
+  scores['raw_f']=intensity_metrics(pred[:,2],raw_f[idx])
   return scores,error
  def fit(train,evaluate_ix,epochs,budget,select):
   phase_start=time.perf_counter()

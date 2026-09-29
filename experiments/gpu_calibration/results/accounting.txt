@@ -1,0 +1,8 @@
+24302196|COMPLETED|00:04:35||billing=4,cpu=4,gres/gpu:l40s=1,gres/gpu=1,mem=16G,node=1
+24302196.batch|COMPLETED|00:04:35|1580276K|cpu=4,gres/gpu:l40s=1,gres/gpu=1,mem=16G,node=1
+24302196.extern|COMPLETED|00:04:35||billing=4,cpu=4,gres/gpu:l40s=1,gres/gpu=1,mem=16G,node=1
+24304930|COMPLETED|00:00:09||billing=4,cpu=4,gres/gpu:l40s=1,gres/gpu=1,mem=8G,node=1
+24304930.batch|COMPLETED|00:00:09|1179564K|cpu=4,gres/gpu:l40s=1,gres/gpu=1,mem=8G,node=1
+24304930.extern|COMPLETED|00:00:09||billing=4,cpu=4,gres/gpu:l40s=1,gres/gpu=1,mem=8G,node=1
+16M	/home/mcox340/orcd/scratch/mol-speedrun-calibration-20260929
+14

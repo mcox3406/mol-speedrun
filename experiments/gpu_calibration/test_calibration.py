@@ -1,6 +1,6 @@
 import unittest
 import torch
-from calibrate import Regressor,four
+from calibrate import Regressor,four,intensity_metrics
 class CalibrationTests(unittest.TestCase):
  def test_padding_does_not_change_prediction(self):
   torch.manual_seed(0);model=Regressor(width=32,layers=2,heads=4,dropout=0).eval();tokens=torch.tensor([[68,69,70],[68,70,0]])
@@ -11,4 +11,7 @@ class CalibrationTests(unittest.TestCase):
   torch.manual_seed(0);model=Regressor(width=32,layers=1,heads=4);p=model(torch.tensor([[68,69,70],[68,70,0]]));targets=four(p)
   torch.testing.assert_close(targets[:,2],p[:,0]-p[:,1]);targets.square().mean().backward()
   self.assertTrue(torch.isfinite(model.token.weight.grad).all());self.assertGreater(model.token.weight.grad.abs().sum().item(),0)
+ def test_brightness_boundary_uses_original_label(self):
+  f=torch.tensor([.1,.05]);log=torch.log10(1+f/.001);result=intensity_metrics(log,f)
+  self.assertEqual(result['bright_n'],1);self.assertLess(result['bright_mae'],1e-6)
 if __name__=='__main__':unittest.main()

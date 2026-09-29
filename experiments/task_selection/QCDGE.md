@@ -1,5 +1,7 @@
 # QCDGE: energy and transition-intensity pilot
 
+**GPU follow-up:** [Engaging calibration completed](../gpu_calibration/README.md): a 1.9M-parameter SMILES transformer improves the pilot errors in a 123-second L40S refit. The full-data speedrun threshold remains open.
+
 **Recommendation:** develop a joint excitation-energy and transition-intensity speedrun. Energy-only prediction is already quite strong with cheap models. Intensity adds useful difficulty, but full-data learning curves and a GPU transformer/GNN run must establish the attainable finish line before freezing rules.
 
 ## Actual results

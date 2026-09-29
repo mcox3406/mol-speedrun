@@ -2,6 +2,8 @@
 
 **Current direction:** a chemically separated excited-state prediction speedrun on one high-end GPU. Read the [new research and measured baselines](experiments/task_selection/QCDGE.md). Dataset and quality thresholds remain under investigation; ESOL below is a pipeline smoke test.
 
+[First GPU calibration completed](experiments/gpu_calibration/README.md): one L40S, 123-second fresh fit, compact scratch setup.
+
 A deliberately small molecular property prediction speedrun **pilot**. Inspired by [nanoGPT](https://github.com/karpathy/nanoGPT) and the [modded-nanogpt rules](https://github.com/KellerJordan/modded-nanogpt#rules). No official target or hardware champion yet.
 
 ## Run it

@@ -1,0 +1,37 @@
+{
+  "status": "completed",
+  "original_run_sha256": "7211409f1cf1789e26d7ed05c87c0c4502b2cffe9955a3b341320015dec4d385",
+  "checkpoint_sha256": "0209fd96babaadb10a6324aa591211826edcd3b56a25b92ed6afc14e602d14fc",
+  "evaluator_sha256": "a1d66e45d40a1f37241292f3001b02e4be44bf8ba66c562f4b9669d3b25e8049",
+  "model_module_sha256": "629056d1d7d1acb9581d815bb7f039a0ffdae153e7b35b1ad0650c127d8d4ad8",
+  "slurm_job_id": "24304930",
+  "gpu": "NVIDIA L40S",
+  "validation": {
+    "S1_eV": {
+      "mae": 0.2496785670518875,
+      "rmse": 0.3605862259864807,
+      "r2": 0.9382369518280029
+    },
+    "T1_eV": {
+      "mae": 0.213170126080513,
+      "rmse": 0.33447250723838806,
+      "r2": 0.9603240489959717
+    },
+    "delta_ST_eV": {
+      "mae": 0.14950449764728546,
+      "rmse": 0.22903409600257874,
+      "r2": 0.9268234372138977
+    },
+    "log10_1_plus_f_over_0001": {
+      "mae": 0.30791085958480835,
+      "rmse": 0.47746244072914124,
+      "r2": 0.6349930167198181
+    },
+    "raw_f": {
+      "mae": 0.03349994122982025,
+      "bright_n": 2202,
+      "bright_mae": 0.14893271028995514
+    }
+  },
+  "notes": "Same fixed checkpoint, no retraining or selection. Corrects brightness-bin membership by using original raw labels rather than a float32 log/inverse-log roundtrip."
+}
