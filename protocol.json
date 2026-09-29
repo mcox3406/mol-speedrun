@@ -1,0 +1,10 @@
+{
+  "id": "qcdge-speedrun-v0",
+  "seeds": [20260929, 20260930, 20260931],
+  "limits": {"gpu": "NVIDIA L40S", "gpus": 1, "cpu_threads": 4, "host_memory_gb": 16, "seconds": 3600},
+  "targets": {"S1_eV": 0.18, "T1_eV": 0.15, "delta_ST_eV": 0.115, "log_f": 0.25, "bright_f": 0.12},
+  "intensity_floor": 0.001,
+  "bright_threshold": 0.1,
+  "ranking": "median inclusive seconds; every prescribed seed must meet every target",
+  "audit": "rare-family generalization; report only after candidate is frozen; no test-based selection"
+}

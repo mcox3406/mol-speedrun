@@ -2,3 +2,6 @@
 __pycache__/
 esol-source.csv
 .DS_Store
+data/qcdge-v0/
+runs/
+*.pt

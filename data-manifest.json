@@ -1,0 +1,26 @@
+{
+  "protocol": "qcdge-speedrun-v0",
+  "source_doi": "10.6084/m9.figshare.c.7259125.v1",
+  "source_license": "CC0-1.0",
+  "files": {
+    "train.csv": {
+      "sha256": "6840b05cfaaa2fc1b788c8890ff51075f3201b7330b07a06d31f7fb37a2ca003",
+      "bytes": 21564857,
+      "rows": 308402
+    },
+    "validation.csv": {
+      "sha256": "c92bccfa6b9e3b60ca3c769a80847c4311f8fcc426568a25a43975352d479174",
+      "bytes": 4542398,
+      "rows": 64549
+    },
+    "audit.csv": {
+      "sha256": "21d1c262941095ba4ee1e3b60b1b36d7b25c610d027e3d49b3ee3bf02589f926",
+      "bytes": 2258139,
+      "rows": 31148
+    },
+    "split.json": {
+      "sha256": "02653cca9d24c99a82dfcefce545ed63be0e857041f348b4b675500d03b84608",
+      "bytes": 8965180
+    }
+  }
+}
