@@ -10,5 +10,6 @@ jobs:
           python-version: '3.12'
       - run: pip install -r requirements.txt
       - run: python -m unittest discover -s tests
+      - run: python -m unittest discover -s experiments/task_selection -p test_selection.py
       - run: python dashboard.py
       - run: git diff --exit-code -- docs/index.html

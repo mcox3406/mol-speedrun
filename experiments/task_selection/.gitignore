@@ -1,0 +1,4 @@
+raw/
+*.npz
+*.npy
+__pycache__/

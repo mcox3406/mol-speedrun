@@ -1,0 +1,214 @@
+{
+  "dataset": "pcqm",
+  "split": "chemical",
+  "closed_shell": true,
+  "eligible_pool_size": 192749,
+  "seed": 20260929,
+  "counts": {
+    "train": 156627,
+    "val": 36122,
+    "inner_fit": 107418,
+    "inner_tune": 49209
+  },
+  "data": {
+    "source_sha256": "628ae612a3de752160929d93d1584a75257ae156e7b13d91b133d8db62e6d701",
+    "rdkit": "2026.03.6",
+    "sampled_rows": 210000,
+    "retained": 209369,
+    "invalid_ids": [
+      411357
+    ],
+    "duplicates_removed": 630,
+    "feature_seconds": 150.71626462507993,
+    "source_path": "pcqm4m-v2.zip",
+    "seed": 20260929
+  },
+  "script_sha256": "50ad57fb6ce572833244cc2f95b3e57147bf08d9959279424594bbe932118606",
+  "hardware": "Apple M2 Pro CPU; 4 numerical-library threads; 4 forest workers",
+  "platform": "macOS-15.5-arm64-arm-64bit",
+  "forest_trees": 64,
+  "forest_max_features": "sqrt",
+  "notes": "Exploratory development validation; custom sampled split, not official leaderboard score. Training-only internal tuning. No optimized neural model yet.",
+  "features": [
+    "MW",
+    "logP",
+    "TPSA",
+    "HBD",
+    "HBA",
+    "rotatable",
+    "rings",
+    "aromatic_rings",
+    "aliphatic_rings",
+    "heteroatoms",
+    "fraction_sp3",
+    "heavy_atoms",
+    "valence_electrons",
+    "molar_refractivity",
+    "BertzCT",
+    "formal_charge",
+    "conjugated_bonds",
+    "aromatic_atoms",
+    "H",
+    "C",
+    "N",
+    "O",
+    "F",
+    "S",
+    "Cl",
+    "Br",
+    "P",
+    "I",
+    "Si",
+    "other_atoms"
+  ],
+  "results": [
+    {
+      "target": "gap_eV",
+      "model": "median",
+      "chosen_hyperparameter": null,
+      "inner_maes": [
+        0.7262060573371836
+      ],
+      "search_seconds": 0.002750375075265765,
+      "fit_seconds": 0.0020390419522300363,
+      "inference_seconds": 0.00011637492571026087,
+      "mae": 0.9195136964536528,
+      "rmse": 1.1746812662185682,
+      "r2": -0.014194420122042306,
+      "mae_bootstrap_95": [
+        0.91163602609452,
+        0.9274263132762277
+      ]
+    },
+    {
+      "target": "gap_eV",
+      "model": "atom_counts_ridge",
+      "chosen_hyperparameter": 0.01,
+      "inner_maes": [
+        0.5394534245323224,
+        0.5394537821238533,
+        0.5394890904872957
+      ],
+      "search_seconds": 0.09538983297534287,
+      "fit_seconds": 0.03937287500593811,
+      "inference_seconds": 0.0032347500091418624,
+      "mae": 0.5725461649649052,
+      "rmse": 0.740305871687078,
+      "r2": 0.5971869617157735,
+      "mae_bootstrap_95": [
+        0.5675828961298305,
+        0.577027457094934
+      ]
+    },
+    {
+      "target": "gap_eV",
+      "model": "descriptors_ridge",
+      "chosen_hyperparameter": 0.01,
+      "inner_maes": [
+        0.42925626056006283,
+        0.4292615705456514,
+        0.4298233421667234
+      ],
+      "search_seconds": 0.2694885419914499,
+      "fit_seconds": 0.13286420900840312,
+      "inference_seconds": 0.00394045899156481,
+      "mae": 0.4730920861225932,
+      "rmse": 0.6185816417187419,
+      "r2": 0.718761233060125,
+      "mae_bootstrap_95": [
+        0.4691896250331624,
+        0.47724656370908347
+      ]
+    },
+    {
+      "target": "gap_eV",
+      "model": "morgan_ridge",
+      "chosen_hyperparameter": 100,
+      "inner_maes": [
+        0.43013907373786814,
+        0.4296795486937683,
+        0.4278503546615134
+      ],
+      "search_seconds": 0.6749497499549761,
+      "fit_seconds": 0.3233514999737963,
+      "inference_seconds": 0.0037119159242138267,
+      "mae": 0.43192507536266195,
+      "rmse": 0.5706647890479205,
+      "r2": 0.760644569709998,
+      "mae_bootstrap_95": [
+        0.42815174174029735,
+        0.43556929339161177
+      ]
+    },
+    {
+      "target": "gap_eV",
+      "model": "descriptors_boosting",
+      "chosen_hyperparameter": 10,
+      "inner_maes": [
+        0.4880953250517244,
+        0.48300193438209765
+      ],
+      "search_seconds": 4.183896458009258,
+      "fit_seconds": 2.8944962909445167,
+      "inference_seconds": 0.08727112493943423,
+      "mae": 0.3335662860549579,
+      "rmse": 0.4465300453346291,
+      "r2": 0.8534511199113478,
+      "mae_bootstrap_95": [
+        0.3307585830140915,
+        0.33638360204443796
+      ]
+    }
+  ],
+  "distribution": {
+    "train": {
+      "heavy_atom_quantiles": [
+        10.0,
+        15.0,
+        17.0
+      ],
+      "unique_scaffolds": 27123,
+      "acyclic_fraction": 0.11453325416435226,
+      "target_mean": [
+        5.754051392969253
+      ],
+      "target_std": [
+        1.1141391798712372
+      ]
+    },
+    "val": {
+      "heavy_atom_quantiles": [
+        9.0,
+        14.0,
+        17.0
+      ],
+      "unique_scaffolds": 6793,
+      "acyclic_fraction": 0.12657106472509827,
+      "target_mean": [
+        5.782610364796245
+      ],
+      "target_std": [
+        1.166432023283778
+      ]
+    },
+    "val_scaffold_unseen_fraction": 0.8734289352749017,
+    "nearest_train_tanimoto": {
+      "n_queries": 500,
+      "quantiles": [
+        0.3888888888888889,
+        0.5,
+        0.6367272727272728
+      ],
+      "fraction_ge_08": 0.014
+    }
+  },
+  "nearest_neighbor_subset": [
+    {
+      "target": "gap_eV",
+      "n_eval": 500,
+      "mae": 0.44200541192117,
+      "rmse": 0.6453549628401989,
+      "r2": 0.6627572899800904
+    }
+  ]
+}

@@ -1,0 +1,92 @@
+{
+  "n": 209369,
+  "neutral_fraction": 1.0,
+  "single_component_fraction": 0.999828054774107,
+  "radical_fraction": 0.07853120567037145,
+  "splits": {
+    "typed_scaffold": {
+      "train": 183107,
+      "val": 26262,
+      "unique_groups_train": 32013,
+      "unique_groups_val": 8004,
+      "cyclic_fraction_train": 0.8666408165717313,
+      "cyclic_fraction_val": 1.0,
+      "heavy_atom_quantiles_train": [
+        9.0,
+        15.0,
+        17.0
+      ],
+      "heavy_atom_quantiles_val": [
+        10.0,
+        15.0,
+        17.0
+      ],
+      "gap_mean_train": 5.6770097762717375,
+      "gap_mean_val": 5.6778513231314545,
+      "nearest_similarity_quantiles": [
+        0.36363636363636365,
+        0.4888888888888889,
+        0.625
+      ],
+      "fraction_ge_08": 0.014,
+      "fraction_ge_06": 0.152,
+      "n_similarity_queries": 1000
+    },
+    "generic_scaffold_with_acyclic_topology": {
+      "train": 192594,
+      "val": 16775,
+      "unique_groups_train": 7725,
+      "unique_groups_val": 1932,
+      "cyclic_fraction_train": 0.9002357290465954,
+      "cyclic_fraction_val": 0.6897168405365127,
+      "heavy_atom_quantiles_train": [
+        10.0,
+        15.0,
+        17.0
+      ],
+      "heavy_atom_quantiles_val": [
+        8.0,
+        15.0,
+        18.0
+      ],
+      "gap_mean_train": 5.668999217267097,
+      "gap_mean_val": 5.770296590255005,
+      "nearest_similarity_quantiles": [
+        0.375,
+        0.5,
+        0.6428571428571429
+      ],
+      "fraction_ge_08": 0.018,
+      "fraction_ge_06": 0.196,
+      "n_similarity_queries": 1000
+    },
+    "typed_scaffold_with_acyclic_topology": {
+      "train": 174227,
+      "val": 35142,
+      "unique_groups_train": 35979,
+      "unique_groups_val": 8995,
+      "cyclic_fraction_train": 0.8856606610915645,
+      "cyclic_fraction_val": 0.8720050082522338,
+      "heavy_atom_quantiles_train": [
+        9.0,
+        15.0,
+        17.0
+      ],
+      "heavy_atom_quantiles_val": [
+        10.0,
+        15.0,
+        17.0
+      ],
+      "gap_mean_train": 5.654973685234027,
+      "gap_mean_val": 5.786889200802412,
+      "nearest_similarity_quantiles": [
+        0.3695652173913043,
+        0.4888888888888889,
+        0.6285714285714286
+      ],
+      "fraction_ge_08": 0.012,
+      "fraction_ge_06": 0.15,
+      "n_similarity_queries": 1000
+    }
+  }
+}

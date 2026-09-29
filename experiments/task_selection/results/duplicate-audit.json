@@ -1,0 +1,12 @@
+{
+  "duplicate_pairs": 630,
+  "absolute_gap_difference_quantiles_eV": [
+    0.0,
+    0.025850815797499482,
+    0.44776334099774945,
+    1.5047895932650004
+  ],
+  "pairs_above_01_eV": 190,
+  "pairs_above_1_eV": 4,
+  "policy": "Study keeps first source-row occurrence of each canonical isomeric SMILES, before making new chemical splits. This audit is diagnostic; it does not filter by targets."
+}

@@ -1,0 +1,47 @@
+{
+  "total": 209369,
+  "eligible": 192749,
+  "excluded_reasons_overlapping": {
+    "radical_electrons": 16442,
+    "unsupported_elements": 155,
+    "no_carbon": 109,
+    "multiple_components": 36
+  },
+  "examples": {
+    "radical_electrons": [
+      "CC1=N[N][C@@H]2[C]1C(=O)N(O)c1ncccc12",
+      "COC(=O)/C=C/C[C@@H]1CC[CH]N1[O]",
+      "O=C1[C](Cc2ccccc2)[CH]N[C@@H]2NNNN12"
+    ],
+    "unsupported_elements": [
+      "C[Se]C[C@H](N)C(=O)O",
+      "C1=CC2=NC([C]3NNNN3)=C[C]2[Se]1",
+      "C/C=C(\\OC(C)(C)C)[Se]C"
+    ],
+    "no_carbon": [
+      "OO[N][N]OO",
+      "[NH][N][N][N][N][NH]",
+      "NN[N][N]N(N)NN"
+    ],
+    "multiple_components": [
+      "C[CH]Br.O=[C]c1cc[nH]c1",
+      "CO[Se][O].[CH3]",
+      "C[Se].C[Se][O]"
+    ]
+  },
+  "allowed_atomic_numbers": [
+    1,
+    5,
+    6,
+    7,
+    8,
+    9,
+    14,
+    15,
+    16,
+    17,
+    35,
+    53
+  ],
+  "notes": "Operational RDKit criterion; zero assigned radical electrons does not independently establish the DFT spin state. No label, gap, size, conjugation or model-error filtering."
+}

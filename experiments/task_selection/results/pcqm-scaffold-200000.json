@@ -1,0 +1,231 @@
+{
+  "dataset": "pcqm",
+  "split": "scaffold",
+  "seed": 20260929,
+  "counts": {
+    "train": 183107,
+    "val": 26262,
+    "inner_fit": 158613,
+    "inner_tune": 24494
+  },
+  "data": {
+    "source_sha256": "628ae612a3de752160929d93d1584a75257ae156e7b13d91b133d8db62e6d701",
+    "rdkit": "2026.03.6",
+    "sampled_rows": 210000,
+    "retained": 209369,
+    "invalid_ids": [
+      411357
+    ],
+    "duplicates_removed": 630,
+    "feature_seconds": 150.71626462507993,
+    "source_path": "pcqm4m-v2.zip",
+    "seed": 20260929
+  },
+  "script_sha256": "6622b0436a960b62d7a78880743b6b3ae8e3e320a2e0072fd89224069156ff4f",
+  "hardware": "Apple M2 Pro CPU; 4 numerical-library threads; 4 forest workers",
+  "platform": "macOS-15.5-arm64-arm-64bit",
+  "forest_trees": 64,
+  "forest_max_features": "sqrt",
+  "notes": "Exploratory development validation; custom sampled split, not official leaderboard score. Training-only internal tuning. No optimized neural model yet.",
+  "features": [
+    "MW",
+    "logP",
+    "TPSA",
+    "HBD",
+    "HBA",
+    "rotatable",
+    "rings",
+    "aromatic_rings",
+    "aliphatic_rings",
+    "heteroatoms",
+    "fraction_sp3",
+    "heavy_atoms",
+    "valence_electrons",
+    "molar_refractivity",
+    "BertzCT",
+    "formal_charge",
+    "conjugated_bonds",
+    "aromatic_atoms",
+    "H",
+    "C",
+    "N",
+    "O",
+    "F",
+    "S",
+    "Cl",
+    "Br",
+    "P",
+    "I",
+    "Si",
+    "other_atoms"
+  ],
+  "results": [
+    {
+      "target": "gap_eV",
+      "model": "median",
+      "chosen_hyperparameter": null,
+      "inner_maes": [
+        1.039643549730225
+      ],
+      "search_seconds": 0.0035697079729288816,
+      "fit_seconds": 0.0024148750817403197,
+      "inference_seconds": 6.76250783726573e-05,
+      "mae": 0.9729069004479722,
+      "rmse": 1.229997145182737,
+      "r2": -0.006957159329284535,
+      "mae_bootstrap_95": [
+        0.9639212684080034,
+        0.9816327151537793
+      ]
+    },
+    {
+      "target": "gap_eV",
+      "model": "atom_counts_ridge",
+      "chosen_hyperparameter": 0.01,
+      "inner_maes": [
+        0.6187629285689259,
+        0.6187647590014318,
+        0.6189477988212281
+      ],
+      "search_seconds": 0.08551716699730605,
+      "fit_seconds": 0.027210625004954636,
+      "inference_seconds": 0.002138374955393374,
+      "mae": 0.6080387985244143,
+      "rmse": 0.7830929531610888,
+      "r2": 0.5918409608303683,
+      "mae_bootstrap_95": [
+        0.6023674247438093,
+        0.6147619707507161
+      ]
+    },
+    {
+      "target": "gap_eV",
+      "model": "descriptors_ridge",
+      "chosen_hyperparameter": 1,
+      "inner_maes": [
+        0.519496890095781,
+        0.5194732259166465,
+        0.5199226377257496
+      ],
+      "search_seconds": 0.23711816605646163,
+      "fit_seconds": 0.0417932498967275,
+      "inference_seconds": 0.0021955000702291727,
+      "mae": 0.5170343588120297,
+      "rmse": 0.6785108129565353,
+      "r2": 0.6935805467371552,
+      "mae_bootstrap_95": [
+        0.5118129211380394,
+        0.5222266636660408
+      ]
+    },
+    {
+      "target": "gap_eV",
+      "model": "morgan_ridge",
+      "chosen_hyperparameter": 0.1,
+      "inner_maes": [
+        0.4748600486672028,
+        0.47486087855486453,
+        0.4758092384468625
+      ],
+      "search_seconds": 0.9198110420256853,
+      "fit_seconds": 0.35911883309017867,
+      "inference_seconds": 0.002335416036657989,
+      "mae": 0.4698806279013437,
+      "rmse": 0.6192134196846969,
+      "r2": 0.7447983330178887,
+      "mae_bootstrap_95": [
+        0.4647597490531317,
+        0.47516915253199055
+      ]
+    },
+    {
+      "target": "gap_eV",
+      "model": "descriptors_boosting",
+      "chosen_hyperparameter": 10,
+      "inner_maes": [
+        0.38262234351557944,
+        0.37972805431571127
+      ],
+      "search_seconds": 5.887770167086273,
+      "fit_seconds": 2.719949541031383,
+      "inference_seconds": 0.0667001249967143,
+      "mae": 0.3888075156276529,
+      "rmse": 0.5342429296460273,
+      "r2": 0.8100320423325208,
+      "mae_bootstrap_95": [
+        0.38426013983716345,
+        0.3937234828704106
+      ]
+    },
+    {
+      "target": "gap_eV",
+      "model": "morgan_descriptors_forest",
+      "chosen_hyperparameter": 1,
+      "inner_maes": [
+        0.38762885665248614,
+        0.45393711580401613
+      ],
+      "search_seconds": 83.56354595895391,
+      "fit_seconds": 47.825794041971676,
+      "inference_seconds": 0.46250666701234877,
+      "mae": 0.36744908500494405,
+      "rmse": 0.5070357159256307,
+      "r2": 0.8288882267614175,
+      "mae_bootstrap_95": [
+        0.36327772232664374,
+        0.3715236422107791
+      ]
+    }
+  ],
+  "distribution": {
+    "train": {
+      "heavy_atom_quantiles": [
+        9.0,
+        15.0,
+        17.0
+      ],
+      "unique_scaffolds": 32013,
+      "acyclic_fraction": 0.13335918342826872,
+      "target_mean": [
+        5.6770097762717375
+      ],
+      "target_std": [
+        1.1588886248304808
+      ]
+    },
+    "val": {
+      "heavy_atom_quantiles": [
+        10.0,
+        15.0,
+        17.0
+      ],
+      "unique_scaffolds": 8004,
+      "acyclic_fraction": 0.0,
+      "target_mean": [
+        5.6778513231314545
+      ],
+      "target_std": [
+        1.2257406988755855
+      ]
+    },
+    "val_scaffold_unseen_fraction": 1.0,
+    "nearest_train_tanimoto": {
+      "n_queries": 500,
+      "quantiles": [
+        0.3694508009153318,
+        0.5,
+        0.6486486486486487
+      ],
+      "fraction_ge_08": 0.014
+    }
+  },
+  "nearest_neighbor_subset": [
+    {
+      "target": "gap_eV",
+      "n_eval": 500,
+      "mae": 0.49161176686732,
+      "rmse": 0.7220487979337016,
+      "r2": 0.6339154518721071
+    }
+  ]
+}

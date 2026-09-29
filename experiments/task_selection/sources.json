@@ -1,0 +1,18 @@
+{
+  "esol.csv": {
+    "url": "https://deepchemdata.s3-us-west-1.amazonaws.com/datasets/delaney-processed.csv",
+    "sha256": "8c06a76f0c6487d29ab0f903e6a7a7139f189ab3c1178f159c8be8964602f189"
+  },
+  "lipo.csv": {
+    "url": "https://deepchemdata.s3-us-west-1.amazonaws.com/datasets/Lipophilicity.csv",
+    "sha256": "aed41590cb30609d51d8e08ad3ff06495a76e80e211358801f596b10da69bacd"
+  },
+  "qm9.csv": {
+    "url": "https://deepchemdata.s3-us-west-1.amazonaws.com/datasets/qm9.csv",
+    "sha256": "3e668f8c34e4bc392a90d417a50a5eed3b64b842a817a633024bdc054c68ccb4"
+  },
+  "pcqm4m-v2.zip": {
+    "url": "https://dgl-data.s3-accelerate.amazonaws.com/dataset/OGB-LSC/pcqm4m-v2.zip",
+    "sha256": "628ae612a3de752160929d93d1584a75257ae156e7b13d91b133d8db62e6d701"
+  }
+}
