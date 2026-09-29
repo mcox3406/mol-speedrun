@@ -1,0 +1,425 @@
+{
+  "source_metadata_sha256": "7642804e756f1cf9ad146ddf3b926bbce0c908ef1db6679fe7148b62c2eb1f3f",
+  "pilot_split_sha256": "25476e9cc593230370d760551f72034db5ece116db29c19db6af83b7ca3ddbb3",
+  "split_sha256": "02653cca9d24c99a82dfcefce545ed63be0e857041f348b4b675500d03b84608",
+  "script_sha256": "127946d3e2aeca3c91b14fe2a49210df4d5b56f312b4f9291dbddaa28c827f50",
+  "counts": {
+    "inner_train": 261923,
+    "inner_validation": 46479,
+    "validation": 64549,
+    "reserve": 31148,
+    "train": 308402
+  },
+  "matched_pilot_validation": 16254,
+  "excluded": [
+    {
+      "id": "Ba000000280",
+      "reason": "unavailable_or_malformed_excitation_record"
+    },
+    {
+      "id": "Ba000016852",
+      "reason": "repeated_canonical_structure"
+    },
+    {
+      "id": "Ba000041854",
+      "reason": "repeated_canonical_structure"
+    },
+    {
+      "id": "Ba000123214",
+      "reason": "nonphysical_excitation_label"
+    },
+    {
+      "id": "Ba000136491",
+      "reason": "unavailable_or_malformed_excitation_record"
+    },
+    {
+      "id": "Ba000246259",
+      "reason": "repeated_canonical_structure"
+    },
+    {
+      "id": "Ba000263617",
+      "reason": "repeated_canonical_structure"
+    },
+    {
+      "id": "Ba000292205",
+      "reason": "repeated_canonical_structure"
+    },
+    {
+      "id": "Ba000350026",
+      "reason": "repeated_canonical_structure"
+    },
+    {
+      "id": "Ba000535722",
+      "reason": "repeated_canonical_structure"
+    },
+    {
+      "id": "Ba000534241",
+      "reason": "repeated_canonical_structure"
+    },
+    {
+      "id": "Ba000543209",
+      "reason": "repeated_canonical_structure"
+    },
+    {
+      "id": "Ba000544646",
+      "reason": "repeated_canonical_structure"
+    },
+    {
+      "id": "Ba000548748",
+      "reason": "repeated_canonical_structure"
+    },
+    {
+      "id": "Ba000535480",
+      "reason": "repeated_canonical_structure"
+    },
+    {
+      "id": "Ba000550655",
+      "reason": "repeated_canonical_structure"
+    },
+    {
+      "id": "Ba005488007",
+      "reason": "nonphysical_excitation_label"
+    },
+    {
+      "id": "Ba009833939",
+      "reason": "repeated_canonical_structure"
+    },
+    {
+      "id": "Ba010926093",
+      "reason": "repeated_canonical_structure"
+    },
+    {
+      "id": "Ba011345687",
+      "reason": "nonphysical_excitation_label"
+    },
+    {
+      "id": "Ba012658548",
+      "reason": "repeated_canonical_structure"
+    },
+    {
+      "id": "Ba013088138",
+      "reason": "repeated_canonical_structure"
+    },
+    {
+      "id": "Ba013177207",
+      "reason": "repeated_canonical_structure"
+    },
+    {
+      "id": "Ba013230784",
+      "reason": "repeated_canonical_structure"
+    },
+    {
+      "id": "Ba013678044",
+      "reason": "repeated_canonical_structure"
+    },
+    {
+      "id": "Ba014938218",
+      "reason": "repeated_canonical_structure"
+    },
+    {
+      "id": "Ba017985985",
+      "reason": "nonphysical_excitation_label"
+    },
+    {
+      "id": "Ba019420358",
+      "reason": "nonphysical_excitation_label"
+    },
+    {
+      "id": "Ba020483578",
+      "reason": "repeated_canonical_structure"
+    },
+    {
+      "id": "Ba020530299",
+      "reason": "repeated_canonical_structure"
+    },
+    {
+      "id": "Ba020700920",
+      "reason": "repeated_canonical_structure"
+    },
+    {
+      "id": "Ba021304360",
+      "reason": "repeated_canonical_structure"
+    },
+    {
+      "id": "Ba021325324",
+      "reason": "repeated_canonical_structure"
+    },
+    {
+      "id": "Ba021409510",
+      "reason": "nonphysical_excitation_label"
+    },
+    {
+      "id": "Ba021614503",
+      "reason": "repeated_canonical_structure"
+    },
+    {
+      "id": "Ba021674921",
+      "reason": "repeated_canonical_structure"
+    },
+    {
+      "id": "Ba021824035",
+      "reason": "repeated_canonical_structure"
+    },
+    {
+      "id": "Ba022596799",
+      "reason": "nonphysical_excitation_label"
+    },
+    {
+      "id": "Ba023461599",
+      "reason": "repeated_canonical_structure"
+    },
+    {
+      "id": "Ba023543710",
+      "reason": "repeated_canonical_structure"
+    },
+    {
+      "id": "Ba023543714",
+      "reason": "repeated_canonical_structure"
+    },
+    {
+      "id": "Ba023543713",
+      "reason": "repeated_canonical_structure"
+    },
+    {
+      "id": "Ba053694823",
+      "reason": "nonphysical_excitation_label"
+    },
+    {
+      "id": "Ba054090286",
+      "reason": "repeated_canonical_structure"
+    },
+    {
+      "id": "Ba054493369",
+      "reason": "repeated_canonical_structure"
+    },
+    {
+      "id": "Ba054501180",
+      "reason": "repeated_canonical_structure"
+    },
+    {
+      "id": "Ba054572793",
+      "reason": "repeated_canonical_structure"
+    },
+    {
+      "id": "Ba055267720",
+      "reason": "repeated_canonical_structure"
+    },
+    {
+      "id": "Ba055291228",
+      "reason": "nonphysical_excitation_label"
+    },
+    {
+      "id": "Ba057012033",
+      "reason": "repeated_canonical_structure"
+    },
+    {
+      "id": "Ba057053600",
+      "reason": "repeated_canonical_structure"
+    },
+    {
+      "id": "Ba057079767",
+      "reason": "repeated_canonical_structure"
+    },
+    {
+      "id": "Ba057081543",
+      "reason": "repeated_canonical_structure"
+    },
+    {
+      "id": "Ba057413359",
+      "reason": "repeated_canonical_structure"
+    },
+    {
+      "id": "Ba057586991",
+      "reason": "repeated_canonical_structure"
+    },
+    {
+      "id": "Ba058205389",
+      "reason": "nonphysical_excitation_label"
+    },
+    {
+      "id": "Ba058526740",
+      "reason": "nonphysical_excitation_label"
+    },
+    {
+      "id": "Ba059717617",
+      "reason": "repeated_canonical_structure"
+    },
+    {
+      "id": "Ba059940728",
+      "reason": "repeated_canonical_structure"
+    },
+    {
+      "id": "Ba068009384",
+      "reason": "repeated_canonical_structure"
+    },
+    {
+      "id": "Ba068296136",
+      "reason": "nonphysical_excitation_label"
+    },
+    {
+      "id": "Ba071339428",
+      "reason": "nonphysical_excitation_label"
+    },
+    {
+      "id": "Ba071374161",
+      "reason": "nonphysical_excitation_label"
+    },
+    {
+      "id": "Ba071380677",
+      "reason": "nonphysical_excitation_label"
+    },
+    {
+      "id": "Ba072741573",
+      "reason": "repeated_canonical_structure"
+    },
+    {
+      "id": "Bb005382062",
+      "reason": "nonphysical_excitation_label"
+    },
+    {
+      "id": "Bb045079595",
+      "reason": "nonphysical_excitation_label"
+    },
+    {
+      "id": "Bb071404880",
+      "reason": "nonphysical_excitation_label"
+    },
+    {
+      "id": "Bb071438184",
+      "reason": "nonphysical_excitation_label"
+    },
+    {
+      "id": "Bb071524419",
+      "reason": "nonphysical_excitation_label"
+    },
+    {
+      "id": "Bb000103000",
+      "reason": "repeated_canonical_structure"
+    },
+    {
+      "id": "Bb003470680",
+      "reason": "repeated_canonical_structure"
+    },
+    {
+      "id": "Bb055288688",
+      "reason": "nonphysical_excitation_label"
+    },
+    {
+      "id": "Bb055301542",
+      "reason": "repeated_canonical_structure"
+    },
+    {
+      "id": "Bb057255200",
+      "reason": "nonphysical_excitation_label"
+    },
+    {
+      "id": "Bb058878666",
+      "reason": "repeated_canonical_structure"
+    },
+    {
+      "id": "Bb059613218",
+      "reason": "nonphysical_excitation_label"
+    },
+    {
+      "id": "Bb067818024",
+      "reason": "nonphysical_excitation_label"
+    },
+    {
+      "id": "Bb068446301",
+      "reason": "nonphysical_excitation_label"
+    },
+    {
+      "id": "Bb068583630",
+      "reason": "nonphysical_excitation_label"
+    },
+    {
+      "id": "Bb069187503",
+      "reason": "nonphysical_excitation_label"
+    },
+    {
+      "id": "Bb069225143",
+      "reason": "repeated_canonical_structure"
+    },
+    {
+      "id": "Bb059842442",
+      "reason": "repeated_canonical_structure"
+    },
+    {
+      "id": "Bb021698941",
+      "reason": "nonphysical_excitation_label"
+    },
+    {
+      "id": "Aa23",
+      "reason": "unavailable_or_malformed_excitation_record"
+    },
+    {
+      "id": "Aa24",
+      "reason": "unavailable_or_malformed_excitation_record"
+    },
+    {
+      "id": "Aa25",
+      "reason": "unavailable_or_malformed_excitation_record"
+    },
+    {
+      "id": "Aa486",
+      "reason": "unavailable_or_malformed_excitation_record"
+    },
+    {
+      "id": "Aa37506",
+      "reason": "nonphysical_excitation_label"
+    }
+  ],
+  "exclusion_counts": {
+    "unavailable_or_malformed_excitation_record": 6,
+    "repeated_canonical_structure": 54,
+    "nonphysical_excitation_label": 29
+  },
+  "distribution": {
+    "train": {
+      "chemical_groups": 10734,
+      "largest_group": 17202,
+      "heavy_atom_quantiles": [
+        8.0,
+        10.0,
+        10.0
+      ],
+      "source_counts": {
+        "Ba": 60196,
+        "Bb": 66289,
+        "Aa": 91858,
+        "Ab": 90059
+      }
+    },
+    "validation": {
+      "chemical_groups": 2684,
+      "largest_group": 4930,
+      "heavy_atom_quantiles": [
+        7.0,
+        9.0,
+        10.0
+      ],
+      "source_counts": {
+        "Ba": 15144,
+        "Bb": 12280,
+        "Aa": 19239,
+        "Ab": 17886
+      }
+    },
+    "reserve": {
+      "chemical_groups": 23212,
+      "largest_group": 18,
+      "heavy_atom_quantiles": [
+        9.0,
+        10.0,
+        10.0
+      ],
+      "source_counts": {
+        "Ba": 2817,
+        "Bb": 5520,
+        "Aa": 9396,
+        "Ab": 13415
+      }
+    }
+  },
+  "notes": "All original family assignments preserved. Entire previously unseen families are reserved; they are rare/small groups, so this reserve is not distribution-matched and is not yet a frozen final test. No reserve labels enter model training or calibration scores. Repeated canonical structures quarantined independently of error size."
+}
