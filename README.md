@@ -1,6 +1,6 @@
 # Mol Speedrun
 
-**Current direction:** a chemically separated PCQM4Mv2 orbital-gap speedrun on one high-end GPU. Read the [task-selection study and actual baseline results](experiments/task_selection/REPORT.md). The ESOL setup below remains a smoke test; the quantum task and its quality threshold are not frozen.
+**Current direction:** a chemically separated excited-state prediction speedrun on one high-end GPU. Read the [new research and measured baselines](experiments/task_selection/EXCITED_STATES.md). Dataset and quality thresholds remain under investigation; ESOL below is a pipeline smoke test.
 
 A deliberately small molecular property prediction speedrun **pilot**. Inspired by [nanoGPT](https://github.com/karpathy/nanoGPT) and the [modded-nanogpt rules](https://github.com/KellerJordan/modded-nanogpt#rules). No official target or hardware champion yet.
 

@@ -1,3 +1,5 @@
+> Follow-up: [excited-state screen](EXCITED_STATES.md) revisits the recommendation below. No final task has been frozen.
+
 # Choosing the first molecular speedrun
 
 **Use PCQM4Mv2 orbital-gap prediction. Establish the chemically separated task first, then calibrate the speed target on one H100.** These are development results, not a frozen benchmark or evidence that a neural model already reaches a useful target within an hour.

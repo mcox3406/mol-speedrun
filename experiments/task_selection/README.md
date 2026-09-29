@@ -1,6 +1,8 @@
 # Quantum task selection — development study
 
-**Recommendation:** PCQM4Mv2 HOMO–LUMO gap, measured in eV, with a chemically grouped holdout and a clearly defined neutral organic domain. ESOL remains a pipeline smoke test. The GPU time-to-quality threshold is **not frozen**.
+**Latest:** [Excited-state task screen](EXCITED_STATES.md), including two chemical-holdout baseline studies and a full emitter-data quality audit.
+
+**Earlier recommendation (under revision):** PCQM4Mv2 HOMO–LUMO gap, measured in eV, with a chemically grouped holdout and a clearly defined neutral organic domain. ESOL remains a pipeline smoke test. The GPU time-to-quality threshold is **not frozen**.
 
 Read [REPORT.md](REPORT.md) for the actual results and proposed protocol. No random-molecule or official-CID-split result is used in this recommendation. Assignment of whole chemical groups is seeded; sampling within the resulting training partition is permitted for learning curves.
 
