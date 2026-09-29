@@ -1,0 +1,18 @@
+{
+  "protocol": "esol-scaffold-v0",
+  "source": "https://deepchemdata.s3-us-west-1.amazonaws.com/datasets/delaney-processed.csv",
+  "source_sha256": "8c06a76f0c6487d29ab0f903e6a7a7139f189ab3c1178f159c8be8964602f189",
+  "rdkit": "2026.03.6",
+  "target": "measured log10 solubility (mol/L)",
+  "policy": "Canonical isomeric SMILES; no salt stripping; duplicates retained within scaffold groups; empty scaffold grouped; largest groups first, lexical ties; 902/113 train/val caps.",
+  "counts": {
+    "train": 902,
+    "val": 113,
+    "test": 113
+  },
+  "files": {
+    "train.csv": "82a5958bc5df6e6a10be7daac57107096774f892cf14312602e10730f6d39e3f",
+    "val.csv": "596c52eba2273025dcbdfbe7fdb8ab329c9e93c9817b92fbf4665f6604b02980",
+    "test.csv": "4a7034c297a280bc21adcdd92215ed9e7cead2194c63a9f3b2347741b4ec8965"
+  }
+}
