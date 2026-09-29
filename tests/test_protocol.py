@@ -22,7 +22,7 @@ class ProtocolTests(unittest.TestCase):
                 a=model(x,torch.zeros(1,2048)); b=model(torch.nn.functional.pad(x,(0,3)),torch.zeros(1,2048))
             torch.testing.assert_close(a,b,atol=1e-6,rtol=1e-5)
     def test_bad_results_rejected(self):
-        from dashboard import validate
+        from legacy_dashboard import validate
         paths=list((ROOT/'submissions').glob('*.json'))
         if not paths: self.skipTest('No result files yet')
         r=json.loads(paths[0].read_text()); r['best_val_rmse']=float('nan')

@@ -19,7 +19,7 @@ def main():
  (out/'manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
  archive=out.parent/'qcdge-v0.tar.gz'
  with archive.open('wb') as raw,gzip.GzipFile(filename='',mode='wb',fileobj=raw,mtime=0) as compressed,tarfile.open(fileobj=compressed,mode='w') as tar:
-  for path in sorted(out.iterdir()):
+  for path in [out/name for name in sorted(set(manifest['files'])|{'manifest.json'})]:
    info=tar.gettarinfo(str(path),arcname=path.name);info.uid=info.gid=0;info.uname=info.gname='';info.mtime=0;info.mode=0o644
    with path.open('rb') as f:tar.addfile(info,f)
  (out.parent/'download.json').write_text(json.dumps(dict(url='https://github.com/mcox3406/mol-speedrun/releases/download/v0.1.0/qcdge-v0.tar.gz',sha256=sha(archive),bytes=archive.stat().st_size),indent=2)+'\n');print(archive,archive.stat().st_size,sha(archive))

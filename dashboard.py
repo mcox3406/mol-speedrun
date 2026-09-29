@@ -1,87 +1,50 @@
-"""Validate result files and build a dependency-free, static dashboard."""
-import html, json, math
+"""Build a static v0 competition dashboard from recorded results; no server/database."""
+import html,json,statistics
 from pathlib import Path
-from prepare import ROOT, digest
-
-def validate(r):
-    assert r['protocol']=='esol-scaffold-v0'
-    assert r['manifest_sha256']==digest(ROOT/'data/manifest.json'), 'Wrong dataset manifest'
-    assert r['model'] in ('mean','ridge','plain','string','graph')
-    assert isinstance(r['seed'],int) and not isinstance(r['seed'],bool)
-    assert r['status']=='exploratory'
-    assert isinstance(r['git_commit'],str) and len(r['git_commit'])==40
-    assert r['history'] and r['device']=='cpu'
-    for key in ('hardware','platform','python','torch','numpy','train_source_sha256'):
-        assert isinstance(r[key],str) and r[key]
-    assert len(r['train_source_sha256'])==64
-    assert isinstance(r['dirty'],bool)
-    for key in ('threads','epochs','parameters'):
-        assert isinstance(r[key],int) and not isinstance(r[key],bool) and r[key]>=0
-    assert r['threads']>0 and r['epochs']>0
-    assert r['preprocessing_seconds']<=r['total_seconds']
-    assert [h['epoch'] for h in r['history']]==list(range(1,len(r['history'])+1))
-    assert len(r['history'])==(1 if r['model'] in ('mean','ridge') else r['epochs'])
-    assert r['best_epoch']==min(r['history'],key=lambda h:h['rmse'])['epoch']
-    for k in ('total_seconds','preprocessing_seconds','best_val_rmse'):
-        assert math.isfinite(r[k]) and r[k]>=0
-    previous=0
-    for h in r['history']:
-        assert math.isfinite(h['rmse']) and h['rmse']>=0
-        assert math.isfinite(h['seconds']) and previous<=h['seconds']<=r['total_seconds']
-        previous=h['seconds']
-    assert math.isclose(r['best_val_rmse'],min(h['rmse'] for h in r['history']),abs_tol=1e-8)
+ROOT=Path(__file__).resolve().parent
 
 def main():
-    results=[]
-    for path in sorted((ROOT/'submissions').glob('*.json')):
-        r=json.loads(path.read_text()); validate(r); r['file']=path.name; results.append(r)
-    rows=[]
-    for r in sorted(results,key=lambda r:r['best_val_rmse']):
-        values=[r['model'],str(r['seed']),f"{r['best_val_rmse']:.3f}",f"{r['total_seconds']:.2f}",f"{r['parameters']:,}",r['hardware'],r['git_commit'][:8]+(' (dirty)' if r['dirty'] else '')]
-        rows.append('<tr>'+''.join('<td>'+html.escape(v)+'</td>' for v in values)+'</tr>')
-    manifest=json.loads((ROOT/'data/manifest.json').read_text())
-    quantum=''
-    study=ROOT/'experiments/task_selection/results'
-    if (study/'qcdge-100000.json').exists() and (study/'qcdge-oscillator.json').exists():
-        energy=json.loads((study/'qcdge-100000.json').read_text())
-        intensity=json.loads((study/'qcdge-oscillator.json').read_text())
-        qrows=[]
-        for model,label in [('morgan_ridge','Morgan ridge'),('descriptor_boosting','Descriptor boosting'),('morgan_descriptors_forest','Fingerprint forest'),('morgan_descriptors_mlp','Fingerprint MLP (3-seed mean)')]:
-            e=[r for r in energy['results'] if r['model']==model]
-            f=[r for r in intensity['results'] if r['model']==model]
-            values=[sum(r['targets'][target]['mae'] for r in e)/len(e) for target in ['S1_eV','T1_eV','delta_ST_eV']]
-            values.append(sum(r['transformed']['mae'] for r in f)/len(f))
-            qrows.append('<tr><td>'+html.escape(label)+'</td>'+''.join(f'<td>{v:.3f}</td>' for v in values)+'</tr>')
-        gpu_path=ROOT/'experiments/gpu_calibration/results/plain-24302196-evaluation.json'
-        if gpu_path.exists():
-            gpu=json.loads(gpu_path.read_text())['validation']
-            values=[gpu[k]['mae'] for k in ['S1_eV','T1_eV','delta_ST_eV','log10_1_plus_f_over_0001']]
-            qrows.append('<tr><td>SMILES transformer (L40S, 1 seed)</td>'+''.join(f'<td>{v:.3f}</td>' for v in values)+'</tr>')
-        quantum='<h2>QCDGE development results</h2><p>75,280 training / 16,257 validation molecules; chemical family holdout. MAE below; lower is better. Fingerprint energy and intensity models are fitted separately; the transformer fits jointly. These are calibration studies, not speed records.</p><div class="scroll"><table><thead><tr><th>Model</th><th>S1 (eV)</th><th>T1 (eV)</th><th>Gap (eV)</th><th>log₁₀(1 + f/0.001)</th></tr></thead><tbody>'+''.join(qrows)+'</tbody></table></div><p><a href="https://github.com/mcox3406/mol-speedrun/blob/research/quantum-task-selection/experiments/task_selection/QCDGE.md">Methods, label audit and remaining calibration</a></p><p>Transformer fresh fit: 123 seconds on one L40S, plus 144 seconds of training-only tuning. <a href="https://github.com/mcox3406/mol-speedrun/blob/research/quantum-task-selection/experiments/gpu_calibration/README.md">GPU protocol and timings</a>.</p><h2>ESOL pipeline smoke test</h2>'
-    cohort_path=ROOT/'experiments/full_cohort/results/cohort-audit.json'
-    if cohort_path.exists():
-        cohort=json.loads(cohort_path.read_text())['counts']
-        full='<h2>Full-cohort calibration</h2><p>'+f"{cohort['train']:,} training / {cohort['validation']:,} validation molecules; {cohort['reserve']:,} molecules from previously unseen families reserved. Existing chemical folds are preserved. The rare-family reserve is not yet a certified final test."+'</p><p>GPU and CPU calibration jobs submitted on Engaging; official error targets remain unset. <a href="https://github.com/mcox3406/mol-speedrun/blob/research/quantum-task-selection/experiments/full_cohort/README.md">Full-cohort protocol and job details</a>.</p>'
-        quantum=full+quantum
-    page='''<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Mol Speedrun · Research pilot</title>
-<style>body{font:17px/1.6 system-ui,sans-serif;background:#f4f3ee;color:#173c3b;max-width:1100px;margin:60px auto;padding:0 24px}h1{font-size:clamp(36px,7vw,70px);line-height:1.1;margin:20px 0}h2{margin-top:40px}a{color:#006c64}.eyebrow{letter-spacing:.12em;text-transform:uppercase;font-size:13px}.cards{display:flex;flex-wrap:wrap;gap:18px}.cards p{background:white;padding:20px;flex:1;border-top:3px solid #00877b}table{border-collapse:collapse;width:100%;font-size:14px;background:white}td,th{text-align:left;padding:12px;border-bottom:1px solid #ddd}.scroll{overflow:auto}button,select{font:inherit;padding:7px}svg{width:100%;background:white}small{color:#49605f}</style>
-<p class="eyebrow">Molecular property prediction / protocol v0</p><h1>How quickly can we<br>learn molecular properties?</h1>
-<p><strong>Task selection in progress:</strong> excited-state prediction is being investigated. <a href="https://github.com/mcox3406/mol-speedrun/blob/research/quantum-task-selection/experiments/task_selection/QCDGE.md">Research and baseline results</a>. The ESOL runs below are pipeline smoke tests.</p>
-<p>A small laboratory for SMILES transformers, string memory, and graph features. Every point below comes from a recorded local run.</p>
-QUANTUM_RESULTS
-<div class="cards"><p><strong>ESOL</strong><br>Measured log₁₀ mol/L</p><p><strong>COUNTS</strong><br>Train / validation / test</p><p><strong>Exploratory</strong><br>No official speed records yet</p></div>
-<p>Lower validation RMSE is better. Times include feature construction, model initialization, training and validation, but exclude imports and download. Compare speed only on matching hardware, threads and software. The test set has not been evaluated.</p>
-<h2>Validation learning curves</h2><label>Run <select id="run"></select></label><div id="plot"></div><p id="curve" aria-live="polite"></p>
-<h2>Recorded runs</h2><p>Sorted by best validation RMSE; this is an exploratory run table, not a statistically qualified leaderboard.</p><div class="scroll"><table><thead><tr><th>Model</th><th>Seed</th><th>RMSE</th><th>Total seconds</th><th>Parameters</th><th>Hardware</th><th>Revision</th></tr></thead><tbody>ROWS</tbody></table></div>
-<h2>Submit an experiment</h2><p>Run the trainer, add its JSON to <code>submissions/</code>, and open a pull request with the code revision, exact command, environment and all seeds. CI checks the result format; maintainers reproduce claims. No login service or database.</p>
-<p><a href="https://github.com/mcox3406/mol-speedrun">Repository, commands and rules</a></p>
-<small>Single scaffold split; seed variability does not measure uncertainty across chemical space. Graph means pooled Morgan-feature fusion, not a full graph Engram implementation.</small>
-<script id="results" type="application/json">DATA</script><script>
-const runs=JSON.parse(document.getElementById('results').textContent), select=document.getElementById('run');
-for(const [i,r] of runs.entries()){const o=document.createElement('option');o.value=i;o.textContent=`${r.model} · seed ${r.seed} · ${r.file}`;select.append(o)}
-function draw(){if(!runs.length){document.getElementById('plot').textContent='No runs yet.';return}const r=runs[select.value||0], h=r.history, xmax=Math.max(...h.map(v=>v.seconds),.01), ymax=Math.max(...h.map(v=>v.rmse),.01)*1.1;const points=h.map(v=>`${60+v.seconds/xmax*700},${270-v.rmse/ymax*230}`).join(' ');document.getElementById('plot').innerHTML=`<svg viewBox="0 0 800 320" role="img" aria-label="Validation RMSE versus elapsed seconds"><path d="M60 30V270H770" fill="none" stroke="#999"/><polyline points="${points}" fill="none" stroke="#00877b" stroke-width="3"/>${h.map(v=>`<circle cx="${60+v.seconds/xmax*700}" cy="${270-v.rmse/ymax*230}" r="4" fill="#00877b"/>`).join('')}<text x="60" y="300">0</text><text x="620" y="300">${xmax.toFixed(1)} seconds</text><text x="10" y="35">${ymax.toFixed(1)}</text><text x="10" y="270">0</text></svg>`;document.getElementById('curve').textContent=h.map(v=>`Epoch ${v.epoch}: RMSE ${v.rmse.toFixed(3)} at ${v.seconds.toFixed(2)}s`).join(' • ')}select.onchange=draw;draw();
-</script></html>'''
-    page=page.replace('QUANTUM_RESULTS',quantum).replace('COUNTS',' / '.join(str(manifest['counts'][s]) for s in ('train','val','test'))).replace('ROWS',''.join(rows)).replace('DATA',json.dumps(results,allow_nan=False).replace('<','\\u003c'))
-    out=ROOT/'docs';out.mkdir(exist_ok=True);(out/'index.html').write_text(page)
-    print(f'Validated {len(results)} runs; wrote docs/index.html')
-if __name__=='__main__': main()
+ protocol=json.loads((ROOT/'protocol.json').read_text());targets=protocol['targets'];index=json.loads((ROOT/'records/index.json').read_text());entries=[]
+ for entry in index:
+  summary=json.loads((ROOT/entry['summary']).read_text());runs=[json.loads((ROOT/p).read_text()) for p in entry['reports']]
+  if sorted(r['seed'] for r in runs)!=protocol['seeds'] or any(r['status']!='qualified' for r in runs):raise ValueError('Incomplete record panel')
+  if any(r['protocol_sha256']!=__import__('hashlib').sha256((ROOT/'protocol.json').read_bytes()).hexdigest() for r in runs):raise ValueError('Stale record protocol')
+  entries.append(dict(name=entry['name'],kind=entry['kind'],median_seconds=summary['median_seconds'],runs=runs,audit=summary['audit'],commit=summary['commit']))
+ rows=[];cpu=json.loads((ROOT/'experiments/full_cohort/results/cpu-24310981.json').read_text());gpu=json.loads((ROOT/'experiments/full_cohort/results/plain-24310980.json').read_text())
+ for model,label in [('atom_counts_ridge','Atom counts + ridge'),('morgan_ridge','Morgan fingerprint + ridge'),('morgan_descriptors_forest','Fingerprint forest'),('morgan_descriptors_mlp','Fingerprint MLP · 3 seeds')]:
+  rr=[r for r in cpu['results'] if r['model']==model];values=[statistics.mean(r['validation'][k]['mae'] for r in rr) for k in ['S1_eV','T1_eV','delta_ST_eV','log10_1_plus_f_over_0001']];rows.append('<tr><td>'+label+'</td>'+''.join(f'<td>{v:.3f}</td>' for v in values)+'</tr>')
+ values=[gpu['validation'][k]['mae'] for k in ['S1_eV','T1_eV','delta_ST_eV','log10_1_plus_f_over_0001']];rows.append('<tr><td>SMILES transformer · calibration</td>'+''.join(f'<td>{v:.3f}</td>' for v in values)+'</tr>')
+ podium=''.join('<tr><td>'+html.escape(e['name'])+'</td><td>'+f"{e['median_seconds']/60:.2f} min"+'</td><td>3 / 3</td><td>'+html.escape(e['kind'])+'</td></tr>' for e in sorted(entries,key=lambda x:x['median_seconds'])) or '<tr><td colspan="4">Reference runs are being verified. No accepted records yet.</td></tr>'
+ gates=''.join(f'<div class="gate"><span>{label}</span><strong>≤ {targets[key]:.3f}<small>{unit}</small></strong></div>' for key,label,unit in [('S1_eV','S₁ energy','eV MAE'),('T1_eV','T₁ energy','eV MAE'),('delta_ST_eV','S₁ − T₁ gap','eV MAE'),('log_f','Absorption strength','transformed MAE'),('bright_f','Strong transitions','raw f MAE')])
+ page=HTML.replace('GATES',gates).replace('LEADER_ROWS',podium).replace('BASELINE_ROWS',''.join(rows)).replace('PAYLOAD',json.dumps(dict(protocol=protocol,entries=entries),allow_nan=False).replace('<','\\u003c'))
+ (ROOT/'docs').mkdir(exist_ok=True);(ROOT/'docs/index.html').write_text(page);(ROOT/'docs/.nojekyll').touch();print(f'Built v0 dashboard: {len(entries)} reference/record panels')
+HTML='''<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="A one-GPU molecular property prediction speedrun. Fixed chemical splits, five accuracy targets, three seeds."><title>Mol Speedrun — Learn the chemistry. Beat the clock.</title>
+<style>
+:root{--ink:#e7eceb;--muted:#9caca8;--panel:#142322;--line:#2b3b38;--green:#b8ed81;--bg:#0c1716;--blue:#82c7ef;--orange:#f4bc7e}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 system-ui,-apple-system,sans-serif}a{color:var(--green);text-underline-offset:4px}a:hover{color:white}a:focus-visible,button:focus-visible,select:focus-visible{outline:2px solid var(--green);outline-offset:4px}main,nav,footer{max-width:1120px;margin:auto;padding:0 28px}nav{display:flex;justify-content:space-between;gap:24px;padding-top:26px;padding-bottom:26px;border-bottom:1px solid var(--line)}nav .brand{font-weight:750;letter-spacing:-.04em;color:var(--ink);text-decoration:none}nav .links{display:flex;gap:22px;flex-wrap:wrap;font-size:14px}.hero{padding:70px 0 40px;position:relative}.eyebrow{font:12px/1.6 ui-monospace,monospace;text-transform:uppercase;letter-spacing:.14em;color:var(--green)}h1{font-size:clamp(42px,7.6vw,86px);line-height:1.02;letter-spacing:-.065em;font-weight:650;margin:24px 0}h1 em{font-style:normal;color:var(--green)}.lede{font-size:20px;max-width:690px;color:var(--muted)}.chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:30px}.chips span{border:1px solid var(--line);padding:7px 13px;border-radius:30px;font:12px ui-monospace,monospace}.section{padding:42px 0;border-top:1px solid var(--line)}h2{font-size:27px;letter-spacing:-.035em;margin:0 0 12px}h3{font-size:18px;margin:0 0 12px}.muted,small{color:var(--muted)}.heading{display:flex;justify-content:space-between;align-items:center;gap:20px}.gates{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden;margin-top:24px}.gate{background:var(--panel);padding:22px 17px}.gate span{font-size:12px;color:var(--muted)}.gate strong{display:block;font-size:27px;font-weight:550;font-variant-numeric:tabular-nums;margin-top:10px;white-space:nowrap}.gate small{display:block;font-size:10px;font-weight:400}.grid{display:grid;grid-template-columns:1.35fr 1fr;gap:24px}.box{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:24px}.scroll{overflow-x:auto}table{width:100%;border-collapse:collapse;font-size:14px}td,th{padding:15px 12px;border-bottom:1px solid var(--line);text-align:left;font-variant-numeric:tabular-nums}th{font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);font-weight:500}td:first-child,th:first-child{padding-left:0}td:not(:first-child),th:not(:first-child){text-align:right;white-space:nowrap}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:13px/1.9 ui-monospace,monospace;color:var(--green);margin:0}code{font-family:ui-monospace,monospace;font-size:.86em}.note{font-size:13px;color:var(--muted)}select{background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:5px;padding:7px;font:12px system-ui}#curve svg{width:100%;height:auto}#curve-info{min-height:22px}.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px}.legend span{display:flex;align-items:center;gap:6px}.legend i{width:9px;height:9px;border-radius:50%}.stats{display:flex;gap:24px;margin:18px 0}.stats strong{display:block;font-size:25px;font-weight:500}.stats span{font-size:12px;color:var(--muted)}footer{border-top:1px solid var(--line);padding-top:30px;padding-bottom:50px;font-size:13px;color:var(--muted)}button{border:1px solid var(--line);background:var(--bg);color:var(--green);padding:8px 12px;border-radius:5px;cursor:pointer}.audit{font-size:13px}.audit strong{color:var(--ink)}@media(max-width:760px){main,nav,footer{padding-left:20px;padding-right:20px}.hero{padding-top:44px}.grid{grid-template-columns:1fr}.gates{grid-template-columns:repeat(2,1fr)}.gate:last-child{grid-column:1/-1}.heading{align-items:flex-start;flex-direction:column}nav{align-items:flex-start}.links{gap:12px!important}.stats{flex-wrap:wrap}td,th{padding:12px 8px}.box{padding:18px}}@media(prefers-reduced-motion:no-preference){a,button{transition:color .15s,border-color .15s}}
+</style></head><body>
+<nav><a class="brand" href="./">mol / speedrun</a><div class="links"><a href="#results">Results</a><a href="https://github.com/mcox3406/mol-speedrun/blob/main/RULES.md">Rules</a><a href="https://github.com/mcox3406/mol-speedrun">GitHub ↗</a></div></nav>
+<main><section class="hero"><div class="eyebrow">Molecular property prediction · v0</div><h1>Learn the chemistry.<br><em>Beat the clock.</em></h1><p class="lede">How fast can one GPU learn molecular excited states? Fixed chemical families. Five error targets. Three seeds. Any architecture.</p><div class="chips"><span>1 × NVIDIA L40S</span><span>308,402 training molecules</span><span>60-minute limit / seed</span><span>11 MB data download</span></div></section>
+<section class="section"><div class="heading"><div><h2>One race. Five gates.</h2><p class="muted">Every seed must pass every target. Rank by median inclusive time.</p></div><a href="https://github.com/mcox3406/mol-speedrun/blob/main/RULES.md">Read the protocol ↗</a></div><div class="gates">GATES</div><p class="note">Absorption strength: log₁₀(1 + f/0.001). Strong transitions: true f ≥ 0.1. Energies are computed vertical excitations; this is not an experimental spectroscopy benchmark.</p></section>
+<section class="section" id="results"><h2>On the clock</h2><p class="muted">Reference measurements and reproduced records. Calibration experiments appear separately below.</p><div class="scroll"><table><thead><tr><th>Recipe</th><th>Median time</th><th>Seeds passed</th><th>Status</th></tr></thead><tbody>LEADER_ROWS</tbody></table></div><div class="box" style="margin-top:24px"><div class="heading"><h3>Time to all five targets</h3><label class="note">View <select id="seed"><option value="all">All seeds</option></select></label></div><div id="curve"></div><div id="legend" class="legend"></div><p id="curve-info" class="note" aria-live="polite"></p></div><p class="note">The plotted score is the largest error/target ratio. All gates pass at ≤ 1. Reported times include preprocessing, training, validation and artifact exports; see the rules for exact boundaries. Three seeds do not establish a p-value.</p></section>
+<section class="section"><div class="grid"><div><h2>Start with a small experiment.</h2><p class="muted">The reference is a 1.90M-parameter bidirectional SMILES transformer. Try fingerprints, graph networks, local memory, or a better training loop.</p><div class="box"><pre id="commands">pip install -r requirements.txt
+python fetch_data.py
+python race.py --seed 20260929 \\
+  --output runs/reference-20260929.json</pre><button id="copy" style="margin-top:16px">Copy commands</button></div><p class="note">Repeat with seeds 20260930 and 20260931. Train from scratch. No external data or pretrained weights.</p></div><div><h2>Chemical separation, explicitly.</h2><div class="stats"><div><strong>64,549</strong><span>validation molecules</span></div><div><strong>31,148</strong><span>rare-family audit molecules</span></div></div><p class="muted">Scaffold and connectivity families stay together. The audit contains previously unseen, mostly rare families; it is a separate generalization check, not a representative hidden test.</p><div id="audit" class="box audit">Audit results appear after reference recipes are frozen.</div><p><a href="https://github.com/mcox3406/mol-speedrun/blob/main/DATA.md">Data, provenance & limitations ↗</a></p></div></div></section>
+<section class="section"><h2>Does a cheap model solve it?</h2><p class="muted">Full-cohort calibration on the same chemical validation fold. Lower MAE is better; these experiments are not speed records.</p><div class="scroll"><table><thead><tr><th>Model</th><th>S₁ · eV</th><th>T₁ · eV</th><th>Gap · eV</th><th>Transformed f</th></tr></thead><tbody>BASELINE_ROWS</tbody></table></div><p class="note">MLP values average three seeds; transformer calibration uses one seed. Calibration selected training schedules on an inner chemical holdout. Timing and tuning budgets differ from the race.</p></section>
+<section class="section"><h2>Make it faster. Show your work.</h2><p class="muted">A submission is a pull request: code, all three runs, predictions, and the frozen checkpoint's rare-family audit. The checker recomputes scores. Maintainers inspect and reproduce record claims.</p><p><a href="https://github.com/mcox3406/mol-speedrun/blob/main/SUBMIT.md">Submit an experiment ↗</a></p></section></main>
+<footer>Inspired by <a href="https://github.com/karpathy/nanoGPT">nanoGPT</a> and <a href="https://github.com/KellerJordan/modded-nanogpt">modded-nanogpt</a>. Data: <a href="https://doi.org/10.6084/m9.figshare.c.7259125.v1">QCDGE</a> · CC0. Small code, public evidence, no leaderboard database.</footer>
+<script id="data" type="application/json">PAYLOAD</script><script>
+const payload=JSON.parse(document.getElementById('data').textContent), entries=payload.entries, select=document.getElementById('seed'), colors=['#b8ed81','#82c7ef','#f4bc7e'];
+const runs=entries.length?entries[0].runs:[];
+for(const [i,r] of runs.entries()){const o=document.createElement('option');o.value=i;o.textContent=`Seed ${r.seed}`;select.append(o)}
+function draw(){const box=document.getElementById('curve');if(!runs.length){box.textContent='Reference verification in progress.';return}const chosen=select.value==='all'?runs:[runs[+select.value]], xmax=Math.max(...runs.map(r=>r.total_seconds))/60, ymin=.8,ymax=4,xx=x=>65+x/xmax*865,yy=y=>250-(Math.min(ymax,Math.max(ymin,y))-ymin)/(ymax-ymin)*210;let svg='<svg viewBox="0 0 970 300" role="img" aria-label="Worst target-normalized error versus minutes, with a pass threshold of one"><rect x="65" y="'+yy(1)+'" width="865" height="'+(250-yy(1))+'" fill="#b8ed81" opacity=".08"/>';
+for(const y of [1,2,3,4])svg+=`<path d="M65 ${yy(y)}H930" stroke="${y===1?'#b8ed81':'#2b3b38'}" stroke-dasharray="${y===1?'5 5':'0'}"/><text x="28" y="${yy(y)+4}" fill="#9caca8" font-size="12">${y}×</text>`;
+for(let i=0;i<=4;i++){const x=xmax*i/4;svg+=`<text x="${xx(x)}" y="275" text-anchor="middle" fill="#9caca8" font-size="12">${x.toFixed(1)}</text>`}svg+='<text x="930" y="295" text-anchor="end" fill="#9caca8" font-size="12">Elapsed minutes</text>';
+for(const r of chosen){const c=colors[runs.indexOf(r)%3],pts=r.history.map(h=>{const ratio=Math.max(...Object.entries(payload.protocol.targets).map(([k,v])=>h.metrics[k]/v));return `${xx(h.seconds/60)},${yy(ratio)}`}).join(' ');svg+=`<polyline points="${pts}" fill="none" stroke="${c}" stroke-width="2.2"/>`}box.innerHTML=svg+'</svg>';document.getElementById('curve-info').textContent='Full validation each reference epoch. Values above 4× are clipped for readability.';
+}
+document.getElementById('legend').innerHTML=runs.map((r,i)=>`<span><i style="background:${colors[i%3]}"></i>Seed ${r.seed} · ${(r.total_seconds/60).toFixed(2)} min</span>`).join('');
+if(entries.length){const a=entries[0].audit;document.getElementById('audit').textContent=`Frozen first-seed audit MAE: S₁ ${a.S1_eV.toFixed(3)} eV · T₁ ${a.T1_eV.toFixed(3)} eV · gap ${a.delta_ST_eV.toFixed(3)} eV · transformed f ${a.log_f.toFixed(3)}. Report-only; not used for ranking.`}
+select.addEventListener('change',draw);draw();document.getElementById('copy').addEventListener('click',async function(){try{await navigator.clipboard.writeText(document.getElementById('commands').textContent);this.textContent='Copied'}catch{this.textContent='Select commands to copy'}});
+</script></body></html>'''
+if __name__=='__main__':main()
