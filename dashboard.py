@@ -40,11 +40,25 @@ def main():
         values=[r['model'],str(r['seed']),f"{r['best_val_rmse']:.3f}",f"{r['total_seconds']:.2f}",f"{r['parameters']:,}",r['hardware'],r['git_commit'][:8]+(' (dirty)' if r['dirty'] else '')]
         rows.append('<tr>'+''.join('<td>'+html.escape(v)+'</td>' for v in values)+'</tr>')
     manifest=json.loads((ROOT/'data/manifest.json').read_text())
-    page='''<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Mol Speedrun · ESOL pilot</title>
+    quantum=''
+    study=ROOT/'experiments/task_selection/results'
+    if (study/'qcdge-100000.json').exists() and (study/'qcdge-oscillator.json').exists():
+        energy=json.loads((study/'qcdge-100000.json').read_text())
+        intensity=json.loads((study/'qcdge-oscillator.json').read_text())
+        qrows=[]
+        for model,label in [('morgan_ridge','Morgan ridge'),('descriptor_boosting','Descriptor boosting'),('morgan_descriptors_forest','Fingerprint forest'),('morgan_descriptors_mlp','Fingerprint MLP (3-seed mean)')]:
+            e=[r for r in energy['results'] if r['model']==model]
+            f=[r for r in intensity['results'] if r['model']==model]
+            values=[sum(r['targets'][target]['mae'] for r in e)/len(e) for target in ['S1_eV','T1_eV','delta_ST_eV']]
+            values.append(sum(r['transformed']['mae'] for r in f)/len(f))
+            qrows.append('<tr><td>'+html.escape(label)+'</td>'+''.join(f'<td>{v:.3f}</td>' for v in values)+'</tr>')
+        quantum='<h2>QCDGE development results</h2><p>75,280 training / 16,257 validation molecules; chemical family holdout. MAE below; lower is better. Energy and intensity models are fitted separately. These are accuracy studies, not speed records.</p><div class="scroll"><table><thead><tr><th>Model</th><th>S1 (eV)</th><th>T1 (eV)</th><th>Gap (eV)</th><th>log₁₀(1 + f/0.001)</th></tr></thead><tbody>'+''.join(qrows)+'</tbody></table></div><p><a href="https://github.com/mcox3406/mol-speedrun/blob/research/quantum-task-selection/experiments/task_selection/QCDGE.md">Methods, label audit and remaining calibration</a></p><h2>ESOL pipeline smoke test</h2>'
+    page='''<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Mol Speedrun · Research pilot</title>
 <style>body{font:17px/1.6 system-ui,sans-serif;background:#f4f3ee;color:#173c3b;max-width:1100px;margin:60px auto;padding:0 24px}h1{font-size:clamp(36px,7vw,70px);line-height:1.1;margin:20px 0}h2{margin-top:40px}a{color:#006c64}.eyebrow{letter-spacing:.12em;text-transform:uppercase;font-size:13px}.cards{display:flex;flex-wrap:wrap;gap:18px}.cards p{background:white;padding:20px;flex:1;border-top:3px solid #00877b}table{border-collapse:collapse;width:100%;font-size:14px;background:white}td,th{text-align:left;padding:12px;border-bottom:1px solid #ddd}.scroll{overflow:auto}button,select{font:inherit;padding:7px}svg{width:100%;background:white}small{color:#49605f}</style>
-<p class="eyebrow">Molecular property prediction / protocol v0</p><h1>How quickly can we<br>learn solubility?</h1>
-<p><strong>Task selection in progress:</strong> excited-state prediction is being investigated. <a href="https://github.com/mcox3406/mol-speedrun/blob/research/quantum-task-selection/experiments/task_selection/EXCITED_STATES.md">Research and baseline results</a>. The ESOL runs below are pipeline smoke tests.</p>
+<p class="eyebrow">Molecular property prediction / protocol v0</p><h1>How quickly can we<br>learn molecular properties?</h1>
+<p><strong>Task selection in progress:</strong> excited-state prediction is being investigated. <a href="https://github.com/mcox3406/mol-speedrun/blob/research/quantum-task-selection/experiments/task_selection/QCDGE.md">Research and baseline results</a>. The ESOL runs below are pipeline smoke tests.</p>
 <p>A small laboratory for SMILES transformers, string memory, and graph features. Every point below comes from a recorded local run.</p>
+QUANTUM_RESULTS
 <div class="cards"><p><strong>ESOL</strong><br>Measured log₁₀ mol/L</p><p><strong>COUNTS</strong><br>Train / validation / test</p><p><strong>Exploratory</strong><br>No official speed records yet</p></div>
 <p>Lower validation RMSE is better. Times include feature construction, model initialization, training and validation, but exclude imports and download. Compare speed only on matching hardware, threads and software. The test set has not been evaluated.</p>
 <h2>Validation learning curves</h2><label>Run <select id="run"></select></label><div id="plot"></div><p id="curve" aria-live="polite"></p>
@@ -57,7 +71,7 @@ const runs=JSON.parse(document.getElementById('results').textContent), select=do
 for(const [i,r] of runs.entries()){const o=document.createElement('option');o.value=i;o.textContent=`${r.model} · seed ${r.seed} · ${r.file}`;select.append(o)}
 function draw(){if(!runs.length){document.getElementById('plot').textContent='No runs yet.';return}const r=runs[select.value||0], h=r.history, xmax=Math.max(...h.map(v=>v.seconds),.01), ymax=Math.max(...h.map(v=>v.rmse),.01)*1.1;const points=h.map(v=>`${60+v.seconds/xmax*700},${270-v.rmse/ymax*230}`).join(' ');document.getElementById('plot').innerHTML=`<svg viewBox="0 0 800 320" role="img" aria-label="Validation RMSE versus elapsed seconds"><path d="M60 30V270H770" fill="none" stroke="#999"/><polyline points="${points}" fill="none" stroke="#00877b" stroke-width="3"/>${h.map(v=>`<circle cx="${60+v.seconds/xmax*700}" cy="${270-v.rmse/ymax*230}" r="4" fill="#00877b"/>`).join('')}<text x="60" y="300">0</text><text x="620" y="300">${xmax.toFixed(1)} seconds</text><text x="10" y="35">${ymax.toFixed(1)}</text><text x="10" y="270">0</text></svg>`;document.getElementById('curve').textContent=h.map(v=>`Epoch ${v.epoch}: RMSE ${v.rmse.toFixed(3)} at ${v.seconds.toFixed(2)}s`).join(' • ')}select.onchange=draw;draw();
 </script></html>'''
-    page=page.replace('COUNTS',' / '.join(str(manifest['counts'][s]) for s in ('train','val','test'))).replace('ROWS',''.join(rows)).replace('DATA',json.dumps(results,allow_nan=False).replace('<','\\u003c'))
+    page=page.replace('QUANTUM_RESULTS',quantum).replace('COUNTS',' / '.join(str(manifest['counts'][s]) for s in ('train','val','test'))).replace('ROWS',''.join(rows)).replace('DATA',json.dumps(results,allow_nan=False).replace('<','\\u003c'))
     out=ROOT/'docs';out.mkdir(exist_ok=True);(out/'index.html').write_text(page)
     print(f'Validated {len(results)} runs; wrote docs/index.html')
 if __name__=='__main__': main()

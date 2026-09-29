@@ -1,6 +1,6 @@
 # Quantum task selection — development study
 
-**Latest:** [Excited-state task screen](EXCITED_STATES.md), including two chemical-holdout baseline studies and a full emitter-data quality audit.
+**Latest:** [QCDGE energy and intensity pilot](QCDGE.md): 75,280/16,257 chemical train/validation split, label audits, classical controls, and three-seed fingerprint MLPs.
 
 **Earlier recommendation (under revision):** PCQM4Mv2 HOMO–LUMO gap, measured in eV, with a chemically grouped holdout and a clearly defined neutral organic domain. ESOL remains a pipeline smoke test. The GPU time-to-quality threshold is **not frozen**.
 

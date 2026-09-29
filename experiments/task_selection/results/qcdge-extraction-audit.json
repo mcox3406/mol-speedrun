@@ -1,0 +1,17 @@
+{
+  "sample_requested": 100000,
+  "extracted_this_run": 95028,
+  "already_present": 21888,
+  "metadata_rows": 441404,
+  "errors": [
+    {
+      "id": "Aa23",
+      "error": "'1.000'"
+    },
+    {
+      "id": "Aa24",
+      "error": "'1.000'"
+    }
+  ],
+  "seconds": 294.4383256669389
+}

@@ -1,0 +1,17 @@
+{
+  "status": "exploratory; no final test or quality threshold frozen",
+  "split_manifest_sha256": "25476e9cc593230370d760551f72034db5ece116db29c19db6af83b7ca3ddbb3",
+  "source_archive_md5": "605935abe6bc17efe841dd5b1253b21a",
+  "files": {
+    "train": {
+      "rows": 75280,
+      "sha256": "e0feedf2fcd57512c35cc13cb2fdea387e33c5b5ee8a494909ee52388bcc6ed1",
+      "path": "train.csv"
+    },
+    "validation": {
+      "rows": 16257,
+      "sha256": "f48e0b693d4e7c1de85bff33a1e842dd3f91be8c722a033bb87265da00cee16a",
+      "path": "validation.csv"
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "metadata_csv": {
+    "bytes": 100269556,
+    "md5": "3c14fa79c7b869ded6eae3c654b873f7",
+    "url": "https://ndownloader.figshare.com/files/46667578"
+  },
+  "hdf5": {
+    "bytes": 48461817766,
+    "md5": "605935abe6bc17efe841dd5b1253b21a",
+    "url": "https://ndownloader.figshare.com/files/46667116"
+  },
+  "hdf5_root_entries": 493167,
+  "metadata_rows": 441404,
+  "paper_reported_molecules": 443106,
+  "policy": "Join using IDs in the publisher metadata CSV; do not assume every HDF5 entry belongs to the curated cohort. The count discrepancy is unresolved.",
+  "external_directory": "/Volumes/sandisk2tb/mol-speedrun/qcdge"
+}

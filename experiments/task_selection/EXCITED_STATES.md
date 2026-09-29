@@ -1,5 +1,7 @@
 # Harder task screen: excited states
 
+**Update:** QCDGE is downloaded and verified; [actual baseline results and label audit](QCDGE.md) now supersede the pending-extraction notes below.
+
 **Decision:** prioritize excited-state regression; do not freeze a dataset or quality threshold yet. QCDGE is the leading next dataset to investigate. Tartarus demonstrates useful difficulty, but its label disagreement and topology concentration need resolving. New quantum calculations are not justified at this stage.
 
 ## Measured evidence
