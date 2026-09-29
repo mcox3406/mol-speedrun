@@ -16,7 +16,13 @@ def main():
  values=[gpu['validation'][k]['mae'] for k in ['S1_eV','T1_eV','delta_ST_eV','log10_1_plus_f_over_0001']];rows.append('<tr><td>SMILES transformer · calibration</td>'+''.join(f'<td>{v:.3f}</td>' for v in values)+'</tr>')
  podium=''.join('<tr><td>'+html.escape(e['name'])+'</td><td>'+f"{e['median_seconds']/60:.2f} min"+'</td><td>3 / 3</td><td>'+html.escape(e['kind'])+'</td></tr>' for e in sorted(entries,key=lambda x:x['median_seconds'])) or '<tr><td colspan="4">Reference runs are being verified. No accepted records yet.</td></tr>'
  gates=''.join(f'<tr><td class="target-name">{label}</td><td>≤ {targets[key]:.3f}<small>{unit}</small></td></tr>' for key,label,unit in [('S1_eV','S₁ excitation energy','eV'),('T1_eV','T₁ excitation energy','eV'),('delta_ST_eV','S₁ − T₁ gap','eV'),('log_f','log₁₀(1 + f / 0.001)',''),('bright_f','Raw f, where true f ≥ 0.1','')])
- page=HTML.replace('GATES',gates).replace('LEADER_ROWS',podium).replace('BASELINE_ROWS',''.join(rows)).replace('PAYLOAD',json.dumps(dict(protocol=protocol,entries=entries),allow_nan=False).replace('<','\\u003c'))
- (ROOT/'docs').mkdir(exist_ok=True);(ROOT/'docs/index.html').write_text(page);(ROOT/'docs/.nojekyll').touch();print(f'Built v0 dashboard: {len(entries)} reference/record panels')
-HTML=(ROOT/'web/index.html').read_text()
+ replacements={'GATES':gates,'LEADER_ROWS':podium,'BASELINE_ROWS':''.join(rows),'PAYLOAD':json.dumps(dict(protocol=protocol,entries=entries),allow_nan=False).replace('<','\\u003c'),'REF_TIME':f"{entries[0]['median_seconds']/60:.2f}" if entries else 'not yet measured','FOOTER':(ROOT/'web/footer.html').read_text()}
+ (ROOT/'docs').mkdir(exist_ok=True)
+ for name in ['index','leaderboard','run']:
+  links=[('index','About'),('leaderboard','Leaderboard'),('run','Run & submit')]
+  nav='<nav class="navigation"><a class="wordmark" href="./">Mol Speedrun <span>v0</span></a><div>'+''.join(f'<a href="{("./" if key=="index" else key+".html")}"'+(' aria-current="page"' if key==name else '')+'>'+label+'</a>' for key,label in links)+'<a href="https://github.com/mcox3406/mol-speedrun">GitHub ↗</a></div></nav>'
+  page=(ROOT/'web'/f'{name}.html').read_text().replace('NAV',nav)
+  for key,value in replacements.items():page=page.replace(key,value)
+  (ROOT/'docs'/f'{name}.html').write_text(page)
+ (ROOT/'docs/.nojekyll').touch();print(f'Built 3 benchmark pages; {len(entries)} reference/record panels')
 if __name__=='__main__':main()

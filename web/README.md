@@ -1,7 +1,11 @@
 # Dashboard
 
-`dashboard.py` fills `index.html` with the frozen protocol and recorded measurements.
-The generated page and its CSS/JavaScript are served from `docs/`.
+`dashboard.py` generates three pages from the templates here: `index.html` explains
+the task, `leaderboard.html` displays recorded measurements and accuracy limits,
+and `run.html` contains installation and submission instructions. Navigation and
+`footer.html` are shared. The generated pages and their CSS/JavaScript are served
+from `docs/`; each page loads only its own script (`molecules.js`,
+`leaderboard.js`, or `run.js`). CI checks that all three generated pages are current.
 
 The molecule explorer uses four **training-only** examples. `docs/molecules.json`
 contains their frozen labels, 2D drawings, and illustrative ETKDG/MMFF conformers;
