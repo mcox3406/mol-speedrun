@@ -11,12 +11,13 @@ function drawLearningCurve(){
  if(!runs.length){box.textContent='No reference measurements available.';return;}
  const selected=seedSelect.value==='all'?runs:[runs[Number(seedSelect.value)]];
  const xmax=Math.max(...runs.map(r=>r.total_seconds))/60,ymin=.8,ymax=Math.ceil(Math.max(...runs.flatMap(r=>r.history.map(h=>Math.max(...Object.entries(payload.protocol.targets).map(([k,v])=>h.metrics[k]/v)))))*2)/2;
- const x=v=>66+v/xmax*850,y=v=>244-(Math.min(ymax,Math.max(ymin,v))-ymin)/(ymax-ymin)*207;
- let svg='<svg viewBox="0 0 950 292" role="img" aria-label="Largest validation error divided by its target, against elapsed minutes. Ratios at or below one pass all five targets."><text x="66" y="18" fill="#626b80" font-size="11">Largest error / target</text>';
- svg+=`<rect x="66" y="${y(1)}" width="850" height="${244-y(1)}" fill="#eef1f9"/>`;
- for(let v=1;v<=ymax;v+=.5)svg+=`<path d="M66 ${y(v)}H916" stroke="${v===1?'#8055aa':'#e0e4ee'}" stroke-dasharray="${v===1?'4 4':'0'}"/><text x="42" y="${y(v)+4}" text-anchor="end" fill="#626b80" font-size="12">${v}</text>`;
+ const width=Math.max(280,box.clientWidth-30),right=width-14,left=44;
+ const x=v=>left+v/xmax*(right-left),y=v=>244-(Math.min(ymax,Math.max(ymin,v))-ymin)/(ymax-ymin)*207;
+ let svg=`<svg viewBox="0 0 ${width} 292" role="img" aria-label="Largest validation error divided by its target, against elapsed minutes. Ratios at or below one pass all five targets."><text x="44" y="18" fill="#626b80" font-size="11">Largest error / target</text>`;
+ svg+=`<rect x="44" y="${y(1)}" width="${right-left}" height="${244-y(1)}" fill="#eef1f9"/>`;
+ for(let v=1;v<=ymax;v+=.5)svg+=`<path d="M44 ${y(v)}H${right}" stroke="${v===1?'#8055aa':'#e0e4ee'}" stroke-dasharray="${v===1?'4 4':'0'}"/><text x="30" y="${y(v)+4}" text-anchor="end" fill="#626b80" font-size="12">${v}</text>`;
  for(let i=0;i<=4;i++){const v=xmax*i/4;svg+=`<text x="${x(v)}" y="265" text-anchor="middle" fill="#626b80" font-size="12">${v.toFixed(1)}</text>`;}
- svg+='<text x="916" y="287" text-anchor="end" fill="#626b80" font-size="11">Elapsed time (minutes)</text>';
+ svg+=`<text x="${right}" y="287" text-anchor="end" fill="#626b80" font-size="11">Elapsed time (minutes)</text>`;
  for(const run of selected){const points=run.history.map(h=>`${x(h.seconds/60)},${y(Math.max(...Object.entries(payload.protocol.targets).map(([k,v])=>h.metrics[k]/v)))}`).join(' ');svg+=`<polyline points="${points}" fill="none" stroke="${palette[runs.indexOf(run)%3]}" stroke-width="2"/>`;}
  box.innerHTML=svg+'</svg>';
  document.getElementById('curve-info').textContent='Export time is included in the reported total.';
@@ -34,7 +35,7 @@ const moleculeSelect=document.getElementById('molecule');
 const energy=n=>n.toFixed(3);
 function drawEnergyLevels(m){
  const zero=248,scale=33,y=e=>zero-e*scale,s=y(m.S1_eV),t=y(m.T1_eV);
- document.getElementById('energy-levels').innerHTML=`<svg viewBox="0 0 470 292" role="img" aria-label="${m.name}: S1 ${energy(m.S1_eV)} electronvolts, T1 ${energy(m.T1_eV)} electronvolts, gap ${energy(m.delta_ST_eV)} electronvolts"><defs><marker id="energy-arrow" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0 0L7 3.5L0 7" fill="none" stroke="#365fb3"/></marker></defs><text x="22" y="23" fill="#626b80" font-size="12">Energy (eV)</text>${[0,2,4,6].map(v=>`<path d="M54 ${y(v)}H420" stroke="#e9ecf3"/><text x="42" y="${y(v)+4}" text-anchor="end" fill="#626b80" font-size="12">${v}</text>`).join('')}<path d="M88 ${zero}H405" stroke="#69738b" stroke-width="2"/><text x="97" y="${zero+22}" fill="#626b80" font-size="13">S₀ · ground-state reference</text><path d="M126 ${s}H244" stroke="#365fb3" stroke-width="3"/><text x="159" y="${s-13}" fill="#365fb3" font-size="14">S₁ · ${energy(m.S1_eV)}</text><path d="M270 ${t}H391" stroke="#8055aa" stroke-width="3"/><text x="270" y="${t-13}" fill="#8055aa" font-size="14">T₁ · ${energy(m.T1_eV)}</text><path d="M135 ${zero-5}V${s+6}" stroke="#365fb3" stroke-width="1.6" marker-end="url(#energy-arrow)"/><path d="M406 ${s}h9V${t}h-9" fill="none" stroke="#bd5887" stroke-width="1.4"/><text x="424" y="${(s+t)/2+4}" fill="#bd5887" font-size="12">ΔE</text></svg>`;
+ document.getElementById('energy-levels').innerHTML=`<svg viewBox="0 0 470 292" role="img" aria-label="${m.name}: S1 ${energy(m.S1_eV)} electronvolts, T1 ${energy(m.T1_eV)} electronvolts, gap ${energy(m.delta_ST_eV)} electronvolts"><defs><marker id="energy-arrow" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0 0L7 3.5L0 7" fill="none" stroke="#365fb3"/></marker></defs><text x="22" y="23" fill="#626b80" font-size="12">Energy (eV)</text>${[0,2,4,6].map(v=>`<path d="M54 ${y(v)}H420" stroke="#e9ecf3"/><text x="30" y="${y(v)+4}" text-anchor="end" fill="#626b80" font-size="12">${v}</text>`).join('')}<path d="M88 ${zero}H405" stroke="#69738b" stroke-width="2"/><text x="97" y="${zero+22}" fill="#626b80" font-size="13">S₀ · ground-state reference</text><path d="M126 ${s}H244" stroke="#365fb3" stroke-width="3"/><text x="159" y="${s-13}" fill="#365fb3" font-size="14">S₁ · ${energy(m.S1_eV)}</text><path d="M270 ${t}H391" stroke="#8055aa" stroke-width="3"/><text x="270" y="${t-13}" fill="#8055aa" font-size="14">T₁ · ${energy(m.T1_eV)}</text><path d="M135 ${zero-5}V${s+6}" stroke="#365fb3" stroke-width="1.6" marker-end="url(#energy-arrow)"/><path d="M406 ${s}h9V${t}h-9" fill="none" stroke="#bd5887" stroke-width="1.4"/><text x="424" y="${(s+t)/2+4}" fill="#bd5887" font-size="12">ΔE</text></svg>`;
  document.getElementById('molecule-values').innerHTML=[['S₁',`${energy(m.S1_eV)} eV`],['T₁',`${energy(m.T1_eV)} eV`],['S₁ − T₁',`${energy(m.delta_ST_eV)} eV`],['Oscillator strength f',m.f_S1.toFixed(4)]].map(([k,v])=>`<div><dt>${k}</dt><dd>${v}</dd></div>`).join('');
 }
 function render3D(){
@@ -67,7 +68,7 @@ function selectMolecule(){
  drawEnergyLevels(current);if(mode==='3d')render3D();
 }
 document.getElementById('view-3d').addEventListener('click',()=>setMode('3d'));document.getElementById('view-2d').addEventListener('click',()=>setMode('2d'));document.getElementById('reset-view').addEventListener('click',render3D);
-window.addEventListener('resize',()=>{if(viewer&&mode==='3d'){viewer.resize();viewer.render();}});
+window.addEventListener('resize',()=>{drawLearningCurve();if(viewer&&mode==='3d'){viewer.resize();viewer.render();}});
 fetch('molecules.json').then(r=>{if(!r.ok)throw new Error('Example data unavailable');return r.json();}).then(data=>{
  molecules=data.molecules;
  for(const [i,m] of molecules.entries()){const option=document.createElement('option');option.value=i;option.textContent=m.name;moleculeSelect.append(option);}
